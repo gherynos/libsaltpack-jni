@@ -13,7 +13,7 @@ extern "C" {
  * Signature: (Lnet/nharyes/libsaltpack/InputParameters;[B)J
  */
 JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2_3B
-        (JNIEnv *, jobject, jobject, jbyteArray);
+  (JNIEnv *, jobject, jobject, jbyteArray);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
@@ -21,7 +21,7 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__
  * Signature: (Lnet/nharyes/libsaltpack/InputParameters;)J
  */
 JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2
-        (JNIEnv *, jobject, jobject);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
@@ -29,7 +29,7 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__
  * Signature: (Lnet/nharyes/libsaltpack/InputParameters;Ljava/io/InputStream;)J
  */
 JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2Ljava_io_InputStream_2
-        (JNIEnv *, jobject, jobject, jobject);
+  (JNIEnv *, jobject, jobject, jobject);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
@@ -37,7 +37,7 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageReader_destructor
-        (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
@@ -45,7 +45,7 @@ JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageReader_destructor
  * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_net_nharyes_libsaltpack_MessageReader_hasMoreBlocks
-        (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
@@ -53,7 +53,7 @@ JNIEXPORT jboolean JNICALL Java_net_nharyes_libsaltpack_MessageReader_hasMoreBlo
  * Signature: (J)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_MessageReader_getBlock
-        (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
@@ -61,7 +61,7 @@ JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_MessageReader_getBlock
  * Signature: (J)[[B
  */
 JNIEXPORT jobjectArray JNICALL Java_net_nharyes_libsaltpack_MessageReader_getRecipients
-        (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
@@ -69,7 +69,7 @@ JNIEXPORT jobjectArray JNICALL Java_net_nharyes_libsaltpack_MessageReader_getRec
  * Signature: (J)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_MessageReader_getSender
-        (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
@@ -77,7 +77,7 @@ JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_MessageReader_getSende
  * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL Java_net_nharyes_libsaltpack_MessageReader_isIntentionallyAnonymous
-        (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus
 }

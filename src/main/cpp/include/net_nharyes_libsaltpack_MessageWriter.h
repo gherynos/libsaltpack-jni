@@ -13,7 +13,7 @@ extern "C" {
  * Signature: (Lnet/nharyes/libsaltpack/OutputParameters;[B[[BZ)J
  */
 JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3BZ
-        (JNIEnv *, jobject, jobject, jbyteArray, jobjectArray, jboolean);
+  (JNIEnv *, jobject, jobject, jbyteArray, jobjectArray, jboolean);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
@@ -21,7 +21,7 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__
  * Signature: (Lnet/nharyes/libsaltpack/OutputParameters;[B[[B)J
  */
 JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3B
-        (JNIEnv *, jobject, jobject, jbyteArray, jobjectArray);
+  (JNIEnv *, jobject, jobject, jbyteArray, jobjectArray);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
@@ -29,7 +29,7 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__
  * Signature: (Lnet/nharyes/libsaltpack/OutputParameters;[[BZ)J
  */
 JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3BZ
-        (JNIEnv *, jobject, jobject, jobjectArray, jboolean);
+  (JNIEnv *, jobject, jobject, jobjectArray, jboolean);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
@@ -37,7 +37,7 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__
  * Signature: (Lnet/nharyes/libsaltpack/OutputParameters;[[B)J
  */
 JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3B
-        (JNIEnv *, jobject, jobject, jobjectArray);
+  (JNIEnv *, jobject, jobject, jobjectArray);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
@@ -45,7 +45,7 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__
  * Signature: (Lnet/nharyes/libsaltpack/OutputParameters;[BZ)J
  */
 JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3BZ
-        (JNIEnv *, jobject, jobject, jbyteArray, jboolean);
+  (JNIEnv *, jobject, jobject, jbyteArray, jboolean);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
@@ -53,7 +53,7 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_destructor
-        (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
@@ -61,7 +61,7 @@ JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_destructor
  * Signature: (J[B)V
  */
 JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_addBlock
-        (JNIEnv *, jobject, jlong, jbyteArray);
+  (JNIEnv *, jobject, jlong, jbyteArray);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
@@ -69,7 +69,7 @@ JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_addBlock
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_finalise
-        (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus
 }
