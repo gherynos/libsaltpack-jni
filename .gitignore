@@ -1,0 +1,8 @@
+# Folders and files to ignore
+.DS_Store
+target/
+.idea
+.project
+.classpath
+.settings
+*.iml
