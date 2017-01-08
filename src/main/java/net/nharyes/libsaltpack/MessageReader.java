@@ -27,7 +27,7 @@ public class MessageReader {
 
         try {
 
-            System.loadLibrary("saltpack_jni");
+            System.loadLibrary("saltpack-jni");
 
         } catch (UnsatisfiedLinkError e) {
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(saltpack_jni)
+project(saltpack-jni)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -Wall")
 if(MSVC)
@@ -21,29 +21,28 @@ include_directories("src/main/cpp/include")
 set(SOURCE_FILES src/main/cpp/InputStreamWrapper.cpp src/main/cpp/OutputStreamWrapper.cpp src/main/cpp/net_nharyes_libsaltpack_MessageReader.cpp src/main/cpp/net_nharyes_libsaltpack_MessageWriter.cpp src/main/cpp/net_nharyes_libsaltpack_Utils.cpp)
 set(HEADER_FILES src/main/cpp/include/common.h src/main/cpp/include/InputStreamWrapper.h src/main/cpp/include/OutputStreamWrapper.h src/main/cpp/include/net_nharyes_libsaltpack_MessageReader.h src/main/cpp/include/net_nharyes_libsaltpack_MessageWriter.h src/main/cpp/include/net_nharyes_libsaltpack_Utils.h)
 
-add_library(saltpack_jni SHARED ${SOURCE_FILES} ${HEADER_FILES})
+add_library(saltpack-jni SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 # JNI
 find_package(JNI REQUIRED)
 include_directories(${JNI_INCLUDE_DIRS})
-target_link_libraries(saltpack_jni ${JNI_LIBRARIES})
+target_link_libraries(saltpack-jni ${JNI_LIBRARIES})
 
 # LibSaltpack
 find_package(LibSaltpack REQUIRED)
 include_directories(${LIBSALTPACK_INCLUDE_DIRS})
-target_link_libraries(saltpack_jni ${LIBSALTPACK_LIBRARIES})
+target_link_libraries(saltpack-jni ${LIBSALTPACK_LIBRARIES})
 
 # LibSodium
 find_package(Libsodium REQUIRED)
 include_directories(${LIBSODIUM_INCLUDE_DIRS})
-target_link_libraries(saltpack_jni ${LIBSODIUM_LIBRARIES})
+target_link_libraries(saltpack-jni ${LIBSODIUM_LIBRARIES})
 
 # MessagePack
 find_package(MsgPack REQUIRED)
 include_directories(${MSGPACK_INCLUDE_DIRS})
-target_link_libraries(saltpack_jni ${MSGPACK_LIBRARIES})
 
 # GMP
 find_package(GMP REQUIRED)
 include_directories(${GMP_INCLUDE_DIRS})
-target_link_libraries(saltpack_jni ${GMP_LIBRARIES})
+target_link_libraries(saltpack-jni ${GMP_LIBRARIES})

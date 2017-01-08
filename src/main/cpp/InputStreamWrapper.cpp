@@ -19,16 +19,18 @@ InputStreamWrapper::InputStreamWrapper(JNIEnv *env, jobject inputStream) : std::
     index = 0;
     dataSize = 0;
 
-    buf = env->NewByteArray(BUF_SIZE);
-    if (buf == NULL) {
+    jbyteArray local_jarray = env->NewByteArray(BUF_SIZE);
+    if (local_jarray == NULL) {
 
         return; /* out of memory error thrown */
     }
+    buf = (jbyteArray) env->NewGlobalRef(local_jarray);
+    env->DeleteLocalRef(local_jarray);
 }
 
 InputStreamWrapper::~InputStreamWrapper() {
 
-    env->DeleteLocalRef(buf);
+    env->DeleteGlobalRef(buf);
 }
 
 int InputStreamWrapper::underflow() {
