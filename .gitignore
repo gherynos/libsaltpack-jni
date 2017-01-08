@@ -6,19 +6,3 @@ target/
 .classpath
 .settings
 *.iml
-compile.sh
-jni/
-lib/
-libsaltpack-jni-libs.jar
-obj/
-Would skip repository tmp/libsaltpack
-tmp/.DS_Store
-tmp/android-ndk-r12b
-tmp/android-ndk-r12b-linux-x86_64.zip
-tmp/gmp-6.1.2
-tmp/gmp-6.1.2.tar.bz2
-tmp/libsodium-1.0.11
-tmp/libsodium-1.0.11.tar.gz
-tmp/msgpack-2.0.0
-tmp/msgpack-2.0.0.tar.gz
-tmp/
