@@ -34,6 +34,11 @@ docker run -v `pwd`:/opt/libsaltpack-jni -t ubuntu:16.04 /bin/bash /opt/libsaltp
 
 This will produce the `libsaltpack-jni-libs.jar` file under the `android` directory; add that file together with the JAR created by the previous step to the Android Studio project.
 
+Documentation
+-------------
+
+The Javadoc can be found here: [https://gherynos.github.io/libsaltpack-jni](https://gherynos.github.io/libsaltpack-jni).
+
 Copyright and license
 ---------------------
 
