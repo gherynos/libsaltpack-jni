@@ -39,6 +39,174 @@ Documentation
 
 The Javadoc can be found here: [https://gherynos.github.io/libsaltpack-jni](https://gherynos.github.io/libsaltpack-jni).
 
+Examples
+--------
+
+### Encrypt/decrypt message
+
+```java
+import net.nharyes.libsaltpack.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+class Test {
+
+    public static void main(String[] args) {
+
+        try {
+
+            // generate keypair
+            byte[] publickey = new byte[Constants.CRYPTO_BOX_PUBLICKEYBYTES];
+            byte[] secretkey = new byte[Constants.CRYPTO_BOX_SECRETKEYBYTES];
+            Utils.generateKeypair(publickey, secretkey);
+
+            // recipients
+            byte[][] recipients = {publickey};
+
+            // encrypt message
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            OutputParameters op = new OutputParameters(out);
+            op.setArmored(true);
+            MessageWriter enc = new MessageWriter(op, secretkey, recipients);
+            enc.addBlock(new byte[]{'T', 'h', 'e', ' ', 'm', 'e', 's', 's', 'a', 'g', 'e'});
+            enc.addBlock(new byte[]{' ', ':', ')'});
+            enc.finalise();
+
+            out.flush();
+            enc.destroy();
+
+            // display encrypted message
+            System.out.println(new String(out.toByteArray(), "UTF-8"));
+
+            // decrypt message
+            ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+            InputParameters ip = new InputParameters(in);
+            ip.setArmored(true);
+            StringBuffer msg = new StringBuffer();
+            MessageReader dec = new MessageReader(ip, secretkey);
+            while (dec.hasMoreBlocks())
+                msg.append(new String(dec.getBlock(), "UTF-8"));
+            dec.destroy();
+
+            // display decrypted message
+            System.out.println(msg.toString());
+
+        } catch (SaltpackException | IOException ex) {
+
+            System.err.println(ex.getMessage());
+        }
+    }
+}
+```
+### Sign/verify message
+
+#### Attached signature
+
+```java
+import net.nharyes.libsaltpack.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+class Test {
+
+    public static void main(String[] args) {
+
+        try {
+
+            // generate keypair
+            byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
+            byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
+            Utils.generateSignKeypair(publickey, secretkey);
+
+            // sign message
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            OutputParameters op = new OutputParameters(out);
+            op.setArmored(true);
+            MessageWriter enc = new MessageWriter(op, secretkey, false);
+            enc.addBlock(new byte[]{'a', ' ', 's', 'i', 'g', 'n', 'e', 'd', ' ', 'm', 'e', 's', 's', 'a', 'g', 'e'});
+            enc.finalise();
+
+            out.flush();
+            enc.destroy();
+
+            // display signed message
+            System.out.println(new String(out.toByteArray(), "UTF-8"));
+
+            // verify message
+            ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+            InputParameters ip = new InputParameters(in);
+            ip.setArmored(true);
+            StringBuffer msg = new StringBuffer();
+            MessageReader dec = new MessageReader(ip);
+            while (dec.hasMoreBlocks())
+                msg.append(new String(dec.getBlock(), "UTF-8"));
+            dec.destroy();
+
+            // display verified message
+            System.out.println(msg.toString());
+
+        } catch (SaltpackException | IOException ex) {
+
+            System.err.println(ex.getMessage());
+        }
+    }
+}
+```
+
+#### Detached signature
+
+```java
+import net.nharyes.libsaltpack.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+class Test {
+
+    public static void main(String[] args) {
+
+        try {
+
+            // generate keypair
+            byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
+            byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
+            Utils.generateSignKeypair(publickey, secretkey);
+
+            // sign message
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            OutputParameters op = new OutputParameters(out);
+            op.setArmored(true);
+            MessageWriter enc = new MessageWriter(op, secretkey, true);
+            enc.addBlock(new byte[]{'a', ' ', 's', 'i', 'g', 'n', 'e', 'd', ' ', 'm', 'e', 's', 's', 'a', 'g', 'e'});
+            enc.finalise();
+
+            out.flush();
+            enc.destroy();
+
+            // display signature
+            System.out.println(new String(out.toByteArray(), "UTF-8"));
+
+            // verify message
+            ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+            InputParameters ip = new InputParameters(in);
+            ip.setArmored(true);
+            ByteArrayInputStream msg = new ByteArrayInputStream("a signed message".getBytes());
+            MessageReader dec = new MessageReader(ip, msg);
+            dec.destroy();
+
+        } catch (SaltpackException | IOException ex) {
+
+            System.err.println(ex.getMessage());
+        }
+    }
+}
+```
+
 Copyright and license
 ---------------------
 
