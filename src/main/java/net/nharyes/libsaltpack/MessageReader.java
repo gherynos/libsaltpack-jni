@@ -77,8 +77,10 @@ public class MessageReader {
      * Desctructor.
      * <p>
      * Securely deletes the allocated buffers using `sodium_memzero`.
+     * </p>
      * <p>
      * This method has to be called when the instance is no longer required.
+     * </p>
      */
     public void destroy() {
 
@@ -126,6 +128,7 @@ public class MessageReader {
      * Returns the public key of the sender.
      *
      * @return the sender's public key.
+     * @throws SaltpackException
      */
     public byte[] getSender() throws SaltpackException {
 

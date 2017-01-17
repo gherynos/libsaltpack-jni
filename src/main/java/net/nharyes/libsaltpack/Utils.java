@@ -17,7 +17,7 @@
 package net.nharyes.libsaltpack;
 
 /**
- *  Utilities class.
+ * Utilities class.
  */
 public class Utils {
 
@@ -67,6 +67,7 @@ public class Utils {
      * @param alphabet the alphabet for the BaseX encoding.
      * @param size     the size of the data to represent.
      * @return the number of characters required to encode {@code size} characters.
+     * @throws SaltpackException
      */
     public static native int baseXblockSize(String alphabet, int size) throws SaltpackException;
 
@@ -76,6 +77,7 @@ public class Utils {
      * @param data     the data to encode.
      * @param alphabet the alphabet for the BaseX encoding.
      * @return the encoded string.
+     * @throws SaltpackException
      */
     public static native String baseXencode(byte[] data, String alphabet) throws SaltpackException;
 
@@ -86,6 +88,7 @@ public class Utils {
      * @param size     the number of characters to encode from {@code data}.
      * @param alphabet the alphabet for the BaseX encoding.
      * @return the encoded string.
+     * @throws SaltpackException
      */
     public static native String baseXencode(byte[] data, int size, String alphabet) throws SaltpackException;
 
@@ -116,4 +119,26 @@ public class Utils {
      * @throws SaltpackException
      */
     public static native String binToHex(byte[] bin) throws SaltpackException;
+
+    /**
+     * Generates some random bytes using `libsodium`.
+     *
+     * @param size the amount of bytes to generate.
+     * @return the random bytes.
+     * @throws SaltpackException
+     */
+    public static native byte[] generateRandomBytes(long size) throws SaltpackException;
+
+    /**
+     * Wrapper for the `crypto_pwhash` function from `libsodium`.
+     *
+     * @param keySize  the size of the key.
+     * @param password the password used to derive the key.
+     * @param salt     the salt used to derive the key.
+     * @param opsLimit the maximum amount of computations to perform.
+     * @param memLimit the maximum amount of RAM that the function will use, in bytes.
+     * @return the derived key.
+     * @throws SaltpackException
+     */
+    public static native byte[] deriveKeyFromPassword(long keySize, String password, byte[] salt, long opsLimit, long memLimit) throws SaltpackException;
 }

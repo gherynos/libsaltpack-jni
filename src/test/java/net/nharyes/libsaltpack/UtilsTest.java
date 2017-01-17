@@ -16,6 +16,9 @@
 
 package net.nharyes.libsaltpack;
 
+import org.hamcrest.core.IsEqual;
+import org.hamcrest.core.IsNot;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Random;
@@ -130,5 +133,44 @@ public class UtilsTest {
         byte[] sPublickey2 = Utils.derivePublickey(sSecretkey);
 
         assertArrayEquals(sPublickey, sPublickey2);
+    }
+
+    @Test
+    public void randomBytes() throws Exception {
+
+        byte[] b1 = Utils.generateRandomBytes(4096);
+        byte[] b2 = Utils.generateRandomBytes(4096);
+
+        assertEquals(b1.length, 4096);
+        assertEquals(b2.length, 4096);
+        Assert.assertThat(b1, IsNot.not(IsEqual.equalTo(b2)));
+    }
+
+    @Test
+    public void keyDerivation() throws Exception {
+
+        byte[] salt = Utils.generateRandomBytes(Constants.CRYPTO_PWHASH_SALTBYTES);
+
+        assertEquals(salt.length, Constants.CRYPTO_PWHASH_SALTBYTES);
+
+        byte[] key = Utils.deriveKeyFromPassword(128, "The passW0rd", salt,
+                Constants.CRYPTO_PWHASH_OPSLIMIT_MODERATE, Constants.CRYPTO_PWHASH_MEMLIMIT_MODERATE);
+
+        assertEquals(key.length, 128);
+
+        byte[] key2 = Utils.deriveKeyFromPassword(128, "The passw0rd", salt,
+                Constants.CRYPTO_PWHASH_OPSLIMIT_MODERATE, Constants.CRYPTO_PWHASH_MEMLIMIT_MODERATE);
+
+        Assert.assertThat(key, IsNot.not(IsEqual.equalTo(key2)));
+
+        byte[] key3 = Utils.deriveKeyFromPassword(128, "The passW0rd", salt,
+                Constants.CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE, Constants.CRYPTO_PWHASH_MEMLIMIT_MODERATE);
+
+        Assert.assertThat(key, IsNot.not(IsEqual.equalTo(key3)));
+
+        key = Utils.deriveKeyFromPassword(Constants.CRYPTO_BOX_SECRETKEYBYTES, "The passW0rd", salt,
+                Constants.CRYPTO_PWHASH_OPSLIMIT_MODERATE, Constants.CRYPTO_PWHASH_MEMLIMIT_MODERATE);
+
+        assertEquals(key.length, Constants.CRYPTO_BOX_SECRETKEYBYTES);
     }
 }

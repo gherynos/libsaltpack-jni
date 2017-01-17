@@ -79,6 +79,22 @@ JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_Utils_hexToBin
 JNIEXPORT jstring JNICALL Java_net_nharyes_libsaltpack_Utils_binToHex
   (JNIEnv *, jclass, jbyteArray);
 
+/*
+ * Class:     net_nharyes_libsaltpack_Utils
+ * Method:    generateRandomBytes
+ * Signature: (J)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_Utils_generateRandomBytes
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     net_nharyes_libsaltpack_Utils
+ * Method:    deriveKeyFromPassword
+ * Signature: (JLjava/lang/String;[BJJ)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_Utils_deriveKeyFromPassword
+  (JNIEnv *, jclass, jlong, jstring, jbyteArray, jlong, jlong);
+
 #ifdef __cplusplus
 }
 #endif

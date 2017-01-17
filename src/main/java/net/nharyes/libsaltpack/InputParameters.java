@@ -22,6 +22,7 @@ import java.io.InputStream;
  * POJO class containing the InputStream and the parameters to parse BaseX armored content.
  * <p>
  * The alphabet used is BASE62.
+ * </p>
  */
 public class InputParameters {
 

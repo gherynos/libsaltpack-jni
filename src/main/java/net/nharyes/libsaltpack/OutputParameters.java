@@ -22,6 +22,7 @@ import java.io.OutputStream;
  * POJO class containing the OutputStream and the parameters to generate BaseX armored content.
  * <p>
  * The alphabet used is BASE62.
+ * </p>
  */
 public class OutputParameters {
 

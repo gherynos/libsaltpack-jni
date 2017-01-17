@@ -302,3 +302,67 @@ jstring Java_net_nharyes_libsaltpack_Utils_binToHex(JNIEnv *env, jclass cls, jby
         return NULL;
     }
 }
+
+jbyteArray Java_net_nharyes_libsaltpack_Utils_generateRandomBytes(JNIEnv *env, jclass cls, jlong size) {
+
+    try {
+
+        saltpack::BYTE_ARRAY out = saltpack::Utils::generateRandomBytes((size_t) size);
+
+        return copyBytes(env, out);
+
+    } catch (...) {
+
+        std::exception_ptr ex = std::current_exception();
+        if (ex)
+            try {
+
+                std::rethrow_exception(ex);
+
+            } catch (const std::exception &e) {
+
+                env->ThrowNew(EXCEPTION_CLASS(env), e.what());
+            }
+
+        else
+            env->ThrowNew(EXCEPTION_CLASS(env), "error");
+
+        return NULL;
+    }
+}
+
+jbyteArray
+Java_net_nharyes_libsaltpack_Utils_deriveKeyFromPassword(JNIEnv *env, jclass cls, jlong keySize, jstring passwordS,
+                                                         jbyteArray saltA, jlong opsLimit, jlong memLimit) {
+
+    try {
+
+        std::string password(env->GetStringUTFChars(passwordS, 0));
+
+        saltpack::BYTE_ARRAY salt = copyBytes(env, saltA);
+
+        saltpack::BYTE_ARRAY
+                out = saltpack::Utils::deriveKeyFromPassword((unsigned long long int) keySize, password, salt,
+                                                             (unsigned long long int) opsLimit, (size_t) memLimit);
+
+        return copyBytes(env, out);
+
+    } catch (...) {
+
+        std::exception_ptr ex = std::current_exception();
+        if (ex)
+            try {
+
+                std::rethrow_exception(ex);
+
+            } catch (const std::exception &e) {
+
+                env->ThrowNew(EXCEPTION_CLASS(env), e.what());
+            }
+
+        else
+            env->ThrowNew(EXCEPTION_CLASS(env), "error");
+
+        return NULL;
+    }
+}

@@ -107,8 +107,10 @@ public class MessageWriter {
      * Desctructor.
      * <p>
      * Securely deletes the allocated buffers using `sodium_memzero`.
+     * </p>
      * <p>
      * This method has to be called when the instance is no longer required.
+     * </p>
      */
     public void destroy() {
 
