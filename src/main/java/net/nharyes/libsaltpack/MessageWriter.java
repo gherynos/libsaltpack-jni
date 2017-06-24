@@ -125,21 +125,12 @@ public class MessageWriter {
      * Adds a block to the current message.
      *
      * @param data the data for the block, maximum 1MB.
+     * @param isFinal the flag defining the last packet of the message.
      * @throws SaltpackException
      */
-    public void addBlock(byte[] data) throws SaltpackException {
+    public void addBlock(byte[] data, boolean isFinal) throws SaltpackException {
 
-        addBlock(ptr, data);
-    }
-
-    /**
-     * Finalises the message by adding the last block to the output stream.
-     *
-     * @throws SaltpackException
-     */
-    public void finalise() throws SaltpackException {
-
-        finalise(ptr);
+        addBlock(ptr, data, isFinal);
     }
 
     private native long constructor(OutputParameters op, byte[] senderSecretkey, byte[][] recipients, boolean visibleRecipients) throws SaltpackException;
@@ -154,7 +145,5 @@ public class MessageWriter {
 
     private native void destructor(long ptr);
 
-    private native void addBlock(long ptr, byte[] data) throws SaltpackException;
-
-    private native void finalise(long ptr) throws SaltpackException;
+    private native void addBlock(long ptr, byte[] data, boolean isFinal) throws SaltpackException;
 }

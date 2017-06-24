@@ -22,9 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Random;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class EncryptionTest {
 
@@ -42,11 +40,10 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey});
 
-        mw.addBlock("Sample".getBytes("UTF-8"));
-        mw.addBlock(" message".getBytes("UTF-8"));
-        mw.addBlock(".".getBytes("UTF-8"));
+        mw.addBlock("Sample".getBytes("UTF-8"), false);
+        mw.addBlock(" message".getBytes("UTF-8"), false);
+        mw.addBlock(".".getBytes("UTF-8"), true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -100,10 +97,9 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey, rPublickey});
 
-        mw.addBlock(buf1);
-        mw.addBlock(buf2);
+        mw.addBlock(buf1, false);
+        mw.addBlock(buf2, true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -148,9 +144,8 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, new byte[][]{rPublickey});
 
-        mw.addBlock(buf1);
+        mw.addBlock(buf1, true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -193,11 +188,10 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
 
-        mw.addBlock("Sample".getBytes("UTF-8"));
-        mw.addBlock(" message".getBytes("UTF-8"));
-        mw.addBlock(".".getBytes("UTF-8"));
+        mw.addBlock("Sample".getBytes("UTF-8"), false);
+        mw.addBlock(" message".getBytes("UTF-8"), false);
+        mw.addBlock(".".getBytes("UTF-8"), true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -252,10 +246,9 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey, rPublickey}, false);
 
-        mw.addBlock(buf1);
-        mw.addBlock(buf2);
+        mw.addBlock(buf1, false);
+        mw.addBlock(buf2, true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -302,9 +295,8 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, new byte[][]{rPublickey}, false);
 
-        mw.addBlock(buf1);
+        mw.addBlock(buf1, true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -348,11 +340,10 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey});
 
-        mw.addBlock("Sample".getBytes("UTF-8"));
-        mw.addBlock(" message".getBytes("UTF-8"));
-        mw.addBlock(" 2.".getBytes("UTF-8"));
+        mw.addBlock("Sample".getBytes("UTF-8"), false);
+        mw.addBlock(" message".getBytes("UTF-8"), false);
+        mw.addBlock(" 2.".getBytes("UTF-8"), true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -408,10 +399,9 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey, rPublickey});
 
-        mw.addBlock(buf1);
-        mw.addBlock(buf2);
+        mw.addBlock(buf1, false);
+        mw.addBlock(buf2, true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -466,10 +456,9 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey, rPublickey}, false);
 
-        mw.addBlock(buf1);
-        mw.addBlock(buf2);
+        mw.addBlock(buf1, false);
+        mw.addBlock(buf2, true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -516,11 +505,10 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
 
-        mw.addBlock("Sample".getBytes("UTF-8"));
-        mw.addBlock(" message".getBytes("UTF-8"));
-        mw.addBlock(".".getBytes("UTF-8"));
+        mw.addBlock("Sample".getBytes("UTF-8"), false);
+        mw.addBlock(" message".getBytes("UTF-8"), false);
+        mw.addBlock(".".getBytes("UTF-8"), true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -579,11 +567,10 @@ public class EncryptionTest {
 
             MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey});
 
-            mw.addBlock("Sample".getBytes("UTF-8"));
-            mw.addBlock(" message".getBytes("UTF-8"));
-            mw.addBlock(".".getBytes("UTF-8"));
+            mw.addBlock("Sample".getBytes("UTF-8"), false);
+            mw.addBlock(" message".getBytes("UTF-8"), false);
+            mw.addBlock(".".getBytes("UTF-8"), true);
 
-            mw.finalise();
             mw.destroy();
 
             byte[] raw = bout.toByteArray();
@@ -628,11 +615,10 @@ public class EncryptionTest {
 
             MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
 
-            mw.addBlock("Sample".getBytes("UTF-8"));
-            mw.addBlock(" message".getBytes("UTF-8"));
-            mw.addBlock(".".getBytes("UTF-8"));
+            mw.addBlock("Sample".getBytes("UTF-8"), false);
+            mw.addBlock(" message".getBytes("UTF-8"), false);
+            mw.addBlock(".".getBytes("UTF-8"), true);
 
-            mw.finalise();
             mw.destroy();
 
             byte[] raw = bout.toByteArray();
@@ -672,6 +658,52 @@ public class EncryptionTest {
         } catch (SaltpackException ex) {
 
             // OK
+        }
+
+        mr = null;
+        try {
+
+            byte[] secretkey = new byte[Constants.CRYPTO_BOX_SECRETKEYBYTES];
+            byte[] publickey = new byte[Constants.CRYPTO_BOX_PUBLICKEYBYTES];
+            Utils.generateKeypair(publickey, secretkey);
+
+            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+            OutputParameters op = new OutputParameters(bout);
+            op.setArmored(true);
+            op.setApp("AAA");
+            op.setWordsInPhrase(15);
+            op.setLettersInWords(23);
+
+            MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
+
+            mw.addBlock("Sample".getBytes("UTF-8"), false);
+            mw.addBlock(" message".getBytes("UTF-8"), false);
+
+            mw.destroy();
+
+            byte[] raw = bout.toByteArray();
+
+            ByteArrayInputStream bin = new ByteArrayInputStream(raw);
+
+            InputParameters ip = new InputParameters(bin);
+            ip.setArmored(true);
+            ip.setApp("AAA");
+
+            mr = new MessageReader(ip, secretkey);
+
+            mr.destroy();
+
+            throw new Exception();
+
+        } catch (SaltpackException ex) {
+
+            // OK
+
+        } finally {
+
+            if (mr != null)
+                mr.destroy();
         }
     }
 }

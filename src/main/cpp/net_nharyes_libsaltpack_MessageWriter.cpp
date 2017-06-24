@@ -344,7 +344,7 @@ void Java_net_nharyes_libsaltpack_MessageWriter_destructor(JNIEnv *env, jobject 
     deleteWObjects(env, objs);
 }
 
-void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject obj, jlong ptr, jbyteArray dataA) {
+void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject obj, jlong ptr, jbyteArray dataA, jboolean isFinal) {
 
     try {
 
@@ -352,38 +352,15 @@ void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject ob
 
         saltpack::BYTE_ARRAY data = copyBytes(env, dataA);
 
-        objs->mw->addBlock(data);
+        objs->mw->addBlock(data, isFinal);
 
-    } catch (...) {
+        if (isFinal) {
 
-        std::exception_ptr ex = std::current_exception();
-        if (ex)
-            try {
+            if (objs->aout != NULL)
+                objs->aout->finalise();
 
-                std::rethrow_exception(ex);
-
-            } catch (const std::exception &e) {
-
-                env->ThrowNew(EXCEPTION_CLASS(env), e.what());
-            }
-
-        else
-            env->ThrowNew(EXCEPTION_CLASS(env), "error");
-    }
-}
-
-void Java_net_nharyes_libsaltpack_MessageWriter_finalise(JNIEnv *env, jobject obj, jlong ptr) {
-
-    try {
-
-        WObjects *objs = reinterpret_cast<WObjects *>(ptr);
-
-        objs->mw->finalise();
-
-        if (objs->aout != NULL)
-            objs->aout->finalise();
-
-        objs->ow->finalise();
+            objs->ow->finalise();
+        }
 
     } catch (...) {
 

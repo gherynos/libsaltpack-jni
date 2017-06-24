@@ -40,11 +40,10 @@ public class SignatureTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, false);
 
-        mw.addBlock("A simple".getBytes("UTF-8"));
-        mw.addBlock(" message".getBytes("UTF-8"));
-        mw.addBlock(".".getBytes("UTF-8"));
+        mw.addBlock("A simple".getBytes("UTF-8"), false);
+        mw.addBlock(" message".getBytes("UTF-8"), false);
+        mw.addBlock(".".getBytes("UTF-8"), true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -92,10 +91,9 @@ public class SignatureTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, true);
 
-        mw.addBlock(buf1);
-        mw.addBlock(buf2);
+        mw.addBlock(buf1, false);
+        mw.addBlock(buf2, true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -126,11 +124,10 @@ public class SignatureTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, false);
 
-        mw.addBlock("A simple".getBytes("UTF-8"));
-        mw.addBlock(" message".getBytes("UTF-8"));
-        mw.addBlock(".".getBytes("UTF-8"));
+        mw.addBlock("A simple".getBytes("UTF-8"), false);
+        mw.addBlock(" message".getBytes("UTF-8"), false);
+        mw.addBlock(".".getBytes("UTF-8"), true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -180,10 +177,9 @@ public class SignatureTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, true);
 
-        mw.addBlock(buf1);
-        mw.addBlock(buf2);
+        mw.addBlock(buf1, false);
+        mw.addBlock(buf2, true);
 
-        mw.finalise();
         mw.destroy();
 
         byte[] raw = bout.toByteArray();
@@ -219,9 +215,8 @@ public class SignatureTest {
 
             MessageWriter mw = new MessageWriter(op, secretkey, false);
 
-            mw.addBlock("A signed message".getBytes("UTF-8"));
+            mw.addBlock("A signed message".getBytes("UTF-8"), true);
 
-            mw.finalise();
             mw.destroy();
 
             byte[] raw = bout.toByteArray();
@@ -276,10 +271,9 @@ public class SignatureTest {
 
             MessageWriter mw = new MessageWriter(op, secretkey, true);
 
-            mw.addBlock(buf1);
-            mw.addBlock(buf2);
+            mw.addBlock(buf1, false);
+            mw.addBlock(buf2, true);
 
-            mw.finalise();
             mw.destroy();
 
             byte[] raw = bout.toByteArray();
@@ -300,6 +294,57 @@ public class SignatureTest {
         } catch (SaltpackException ex) {
 
             assertEquals(ex.getMessage(), "Signature was forged or corrupt.");
+
+        } finally {
+
+            if (mr != null)
+                mr.destroy();
+        }
+
+        mr = null;
+        try {
+
+            byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
+            byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
+            Utils.generateSignKeypair(publickey, secretkey);
+
+            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+            OutputParameters op = new OutputParameters(bout);
+            op.setArmored(true);
+
+            byte[] buf1 = new byte[1024];
+            byte[] buf2 = new byte[1024 * 1024];
+            Random r = new Random();
+            r.nextBytes(buf1);
+            r.nextBytes(buf2);
+            ByteArrayOutputStream merged = new ByteArrayOutputStream();
+            merged.write(buf1);
+            merged.write(buf2);
+
+            MessageWriter mw = new MessageWriter(op, secretkey, true);
+
+            mw.addBlock(buf1, false);
+            mw.addBlock(buf2, false);
+
+            mw.destroy();
+
+            byte[] raw = bout.toByteArray();
+
+            ByteArrayInputStream bin = new ByteArrayInputStream(raw);
+
+            InputParameters ip = new InputParameters(bin);
+            ip.setArmored(true);
+
+            mr = new MessageReader(ip, new ByteArrayInputStream(merged.toByteArray()));
+
+            mr.destroy();
+
+            throw new Exception();
+
+        } catch (SaltpackException ex) {
+
+            // OK
 
         } finally {
 

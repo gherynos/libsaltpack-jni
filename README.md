@@ -6,7 +6,7 @@ Dependencies
 ------------
 
 * [libsaltpack](https://github.com/Gherynos/libsaltpack)
-* [libsodium](https://download.libsodium.org/doc/) >= 1.0.3
+* [libsodium](https://download.libsodium.org/doc/) >= 1.0.9
 * [msgpack](https://github.com/msgpack/msgpack-c) >= 2.0.0
 * [GMP](https://gmplib.org/) >= 6.0.0 (or [MPIR](http://mpir.org/) >= 2.6.0 on Windows)
 

@@ -3,7 +3,7 @@
 NDK_VER=r12b
 LIBSODIUM_VER=1.0.11
 LIBGMP_VER=6.1.2
-MSGPACK_VER=2.0.0
+MSGPACK_VER=2.1.1
 
 PT=/opt/libsaltpack-jni/android/tmp
 cd $PT
