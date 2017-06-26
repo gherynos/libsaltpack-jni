@@ -73,6 +73,12 @@ public class MessageReader {
         ptr = constructor(in, messageIn);
     }
 
+    // TODO: add documentation
+    public MessageReader(InputParameters in, byte[] recipientSecretkey, byte[][] symmetricKey) throws SaltpackException {
+
+        ptr = constructor(in, recipientSecretkey, symmetricKey);
+    }
+
     /**
      * Desctructor.
      * <p>
@@ -146,11 +152,13 @@ public class MessageReader {
         return isIntentionallyAnonymous(ptr);
     }
 
-    private native long constructor(InputParameters in, byte[] senderSecretkey) throws SaltpackException;
+    private native long constructor(InputParameters in, byte[] recipientSecretkey) throws SaltpackException;
 
     private native long constructor(InputParameters in) throws SaltpackException;
 
     private native long constructor(InputParameters in, InputStream messageIn) throws SaltpackException;
+
+    private native long constructor(InputParameters in, byte[] recipientSecretkey, byte[][] symmetricKey) throws SaltpackException;
 
     private native void destructor(long ptr);
 

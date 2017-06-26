@@ -103,6 +103,18 @@ public class MessageWriter {
         ptr = constructor(op, senderSecretkey, detatchedSignature);
     }
 
+    // TODO: add documentation
+    public MessageWriter(OutputParameters op, byte[] senderSecretkey, byte[][] recipientsPublickeys, byte[][][] symmetricKeys) throws SaltpackException {
+
+        ptr = constructor(op, senderSecretkey, recipientsPublickeys, symmetricKeys);
+    }
+
+    // TODO: add documentation
+    public MessageWriter(OutputParameters op, byte[][] recipientsPublickeys, byte[][][] symmetricKeys) throws SaltpackException {
+
+        ptr = constructor(op, recipientsPublickeys, symmetricKeys);
+    }
+
     /**
      * Desctructor.
      * <p>
@@ -142,6 +154,10 @@ public class MessageWriter {
     private native long constructor(OutputParameters op, byte[][] recipients) throws SaltpackException;
 
     private native long constructor(OutputParameters op, byte[] senderSecretkey, boolean detatchedSignature) throws SaltpackException;
+
+    private native long constructor(OutputParameters op, byte[] senderSecretkey, byte[][] recipientsPublickeys, byte[][][] symmetricKeys) throws SaltpackException;
+
+    private native long constructor(OutputParameters op, byte[][] recipientsPublickeys, byte[][][] symmetricKeys) throws SaltpackException;
 
     private native void destructor(long ptr);
 

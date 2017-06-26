@@ -219,6 +219,49 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
     }
 }
 
+jlong
+Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2_3B_3_3B(JNIEnv *env,
+                                                                                                           jobject obj,
+                                                                                                           jobject in,
+                                                                                                           jbyteArray recipientSecretkeyA,
+                                                                                                           jobjectArray key) {
+
+    RObjects *objs = NULL;
+    try {
+
+        saltpack::BYTE_ARRAY recipientSecretkey = copyBytes(env, recipientSecretkeyA);
+
+        objs = populateInputStreams(env, in);
+
+        if (objs->ain == NULL)
+            objs->mr = new saltpack::MessageReader(*objs->iw, recipientSecretkey, convertPair(env, key));
+        else
+            objs->mr = new saltpack::MessageReader(*objs->ain, recipientSecretkey, convertPair(env, key));
+
+        return (long) objs;
+
+    } catch (...) {
+
+        deleteRObjects(env, objs);
+
+        std::exception_ptr ex = std::current_exception();
+        if (ex)
+            try {
+
+                std::rethrow_exception(ex);
+
+            } catch (const std::exception &e) {
+
+                env->ThrowNew(EXCEPTION_CLASS(env), e.what());
+            }
+
+        else
+            env->ThrowNew(EXCEPTION_CLASS(env), "error");
+
+        return -1;
+    }
+}
+
 void Java_net_nharyes_libsaltpack_MessageReader_destructor(JNIEnv *env, jobject obj, jlong ptr) {
 
     RObjects *objs = reinterpret_cast<RObjects *>(ptr);

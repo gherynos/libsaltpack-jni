@@ -49,6 +49,22 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
+ * Method:    constructor
+ * Signature: (Lnet/nharyes/libsaltpack/OutputParameters;[B[[B[[[B)J
+ */
+JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3B_3_3_3B
+  (JNIEnv *, jobject, jobject, jbyteArray, jobjectArray, jobjectArray);
+
+/*
+ * Class:     net_nharyes_libsaltpack_MessageWriter
+ * Method:    constructor
+ * Signature: (Lnet/nharyes/libsaltpack/OutputParameters;[[B[[[B)J
+ */
+JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3B_3_3_3B
+  (JNIEnv *, jobject, jobject, jobjectArray, jobjectArray);
+
+/*
+ * Class:     net_nharyes_libsaltpack_MessageWriter
  * Method:    destructor
  * Signature: (J)V
  */

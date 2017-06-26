@@ -33,6 +33,14 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
+ * Method:    constructor
+ * Signature: (Lnet/nharyes/libsaltpack/InputParameters;[B[[B)J
+ */
+JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2_3B_3_3B
+  (JNIEnv *, jobject, jobject, jbyteArray, jobjectArray);
+
+/*
+ * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    destructor
  * Signature: (J)V
  */
