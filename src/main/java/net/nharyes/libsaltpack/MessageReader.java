@@ -73,7 +73,15 @@ public class MessageReader {
         ptr = constructor(in, messageIn);
     }
 
-    // TODO: add documentation
+    /**
+     * Creates a new MessageReader instance to decrypt and verify a signcrypted message.
+     *
+     * @param in                 the InputParameters with the source input stream containing the detached signature.
+     * @param recipientSecretkey the Curve25519 private key of the recipient. The array can be empty.
+     * @param symmetricKey       the symmetric key of the recipient: the first array is treated as the identifier,
+     *                           the second as the key itself. The arrays can be empty.
+     * @throws SaltpackException if the signature verification fails.
+     */
     public MessageReader(InputParameters in, byte[] recipientSecretkey, byte[][] symmetricKey) throws SaltpackException {
 
         ptr = constructor(in, recipientSecretkey, symmetricKey);
