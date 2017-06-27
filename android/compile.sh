@@ -3,7 +3,8 @@
 NDK_VER=r12b
 LIBSODIUM_VER=1.0.11
 LIBGMP_VER=6.1.2
-MSGPACK_VER=2.0.0
+MSGPACK_VER=2.1.1
+LIBSALTPACK_VER=0.2.1
 
 PT=/opt/libsaltpack-jni/android/tmp
 cd $PT
@@ -98,14 +99,19 @@ export MSGPACK_PATH=$PT/msgpack-$MSGPACK_VER
 
 # LibSaltpack
 echo "LibSaltpack"
-if [ ! -e "$PT/libsaltpack" ]
+if [ ! -e "$PT/libsaltpack-$LIBSALTPACK_VER" ]
 then
     git clone https://github.com/Gherynos/libsaltpack.git
-    cd libsaltpack/android
+    if [ ! -e "$PT/libsaltpack-$LIBSALTPACK_VER.tar.gz" ]
+    then
+        wget -O $PT/libsaltpack-$LIBSALTPACK_VER.tar.gz https://github.com/Gherynos/libsaltpack/archive/v$LIBSALTPACK_VER.tar.gz
+    fi
+    tar -xvzf libsaltpack-$LIBSALTPACK_VER.tar.gz
+    cd libsaltpack-$LIBSALTPACK_VER/android
     $ANDROID_NDK_HOME/ndk-build
     cd $PT
 fi
-export LIBSALTPACK_PATH=$PT/libsaltpack
+export LIBSALTPACK_PATH=$PT/libsaltpack-$LIBSALTPACK_VER
 
 # LibSaltpack-jni
 echo "LibSaltpack-jni"

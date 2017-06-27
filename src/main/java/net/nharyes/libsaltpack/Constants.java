@@ -42,6 +42,11 @@ public class Constants {
     public static final int CRYPTO_SIGN_SECRETKEYBYTES = 64;
 
     /**
+     * Constant defining the size of a symmetric key used when signcrypting/verifying a message with {@link net.nharyes.libsaltpack.MessageWriter} and {@link net.nharyes.libsaltpack.MessageReader}.
+     */
+    public static final int CRYPTO_SECRETBOX_KEYBYTES = 32;
+
+    /**
      * BASE64 alphabet constant for {@link net.nharyes.libsaltpack.Utils} {@code baseX} methods.
      */
     public static final String ALPHABET_BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

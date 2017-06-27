@@ -337,24 +337,27 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
     return (long) objs;
 }
 
-void Java_net_nharyes_libsaltpack_MessageWriter_destructor(JNIEnv *env, jobject obj, jlong ptr) {
+jlong
+Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3B_3_3_3B(
+        JNIEnv *env, jobject obj, jobject op, jbyteArray senderSecretkeyA, jobjectArray recipients, jobjectArray keys) {
 
-    WObjects *objs = reinterpret_cast<WObjects *>(ptr);
-
-    deleteWObjects(env, objs);
-}
-
-void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject obj, jlong ptr, jbyteArray dataA) {
-
+    WObjects *objs = NULL;
     try {
 
-        WObjects *objs = reinterpret_cast<WObjects *>(ptr);
+        saltpack::BYTE_ARRAY senderSecretkey = copyBytes(env, senderSecretkeyA);
 
-        saltpack::BYTE_ARRAY data = copyBytes(env, dataA);
+        objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
-        objs->mw->addBlock(data);
+        if (objs->aout == NULL)
+            objs->mw = new saltpack::MessageWriter(*objs->ow, senderSecretkey, convertRecipients(env, recipients),
+                                                   convertKeys(env, keys));
+        else
+            objs->mw = new saltpack::MessageWriter(*objs->aout, senderSecretkey, convertRecipients(env, recipients),
+                                                   convertKeys(env, keys));
 
     } catch (...) {
+
+        deleteWObjects(env, objs);
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
@@ -369,21 +372,77 @@ void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject ob
 
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
+
+        return -1;
     }
+
+    return (long) objs;
 }
 
-void Java_net_nharyes_libsaltpack_MessageWriter_finalise(JNIEnv *env, jobject obj, jlong ptr) {
+jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3B_3_3_3B(
+        JNIEnv *env, jobject obj, jobject op, jobjectArray recipients, jobjectArray keys) {
+
+    WObjects *objs = NULL;
+    try {
+
+        objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
+
+        if (objs->aout == NULL)
+            objs->mw = new saltpack::MessageWriter(*objs->ow, convertRecipients(env, recipients),
+                                                   convertKeys(env, keys));
+        else
+            objs->mw = new saltpack::MessageWriter(*objs->aout, convertRecipients(env, recipients),
+                                                   convertKeys(env, keys));
+
+    } catch (...) {
+
+        deleteWObjects(env, objs);
+
+        std::exception_ptr ex = std::current_exception();
+        if (ex)
+            try {
+
+                std::rethrow_exception(ex);
+
+            } catch (const std::exception &e) {
+
+                env->ThrowNew(EXCEPTION_CLASS(env), e.what());
+            }
+
+        else
+            env->ThrowNew(EXCEPTION_CLASS(env), "error");
+
+        return -1;
+    }
+
+    return (long) objs;
+}
+
+void Java_net_nharyes_libsaltpack_MessageWriter_destructor(JNIEnv *env, jobject obj, jlong ptr) {
+
+    WObjects *objs = reinterpret_cast<WObjects *>(ptr);
+
+    deleteWObjects(env, objs);
+}
+
+void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject obj, jlong ptr, jbyteArray dataA,
+                                                         jboolean isFinal) {
 
     try {
 
         WObjects *objs = reinterpret_cast<WObjects *>(ptr);
 
-        objs->mw->finalise();
+        saltpack::BYTE_ARRAY data = copyBytes(env, dataA);
 
-        if (objs->aout != NULL)
-            objs->aout->finalise();
+        objs->mw->addBlock(data, isFinal);
 
-        objs->ow->finalise();
+        if (isFinal) {
+
+            if (objs->aout != NULL)
+                objs->aout->finalise();
+
+            objs->ow->finalise();
+        }
 
     } catch (...) {
 

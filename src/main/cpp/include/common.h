@@ -88,4 +88,32 @@ inline std::list<saltpack::BYTE_ARRAY> convertRecipients(JNIEnv *env, jobjectArr
     return lRecipients;
 }
 
+inline std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> convertPair(JNIEnv *env, jobjectArray pair) {
+
+    jsize len = env->GetArrayLength(pair);
+    if (len != 2)
+        return std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>();
+
+    jbyteArray pair1 = (jbyteArray) env->GetObjectArrayElement(pair, 0);
+    jbyteArray pair2 = (jbyteArray) env->GetObjectArrayElement(pair, 1);
+
+    saltpack::BYTE_ARRAY pair1A = copyBytes(env, pair1);
+    saltpack::BYTE_ARRAY pair2A = copyBytes(env, pair2);
+
+    return std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>(pair1A, pair2A);
+}
+
+inline std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> convertKeys(JNIEnv *env, jobjectArray keys) {
+
+    jsize len = env->GetArrayLength(keys);
+    std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> lKeys;
+    for (jsize i = 0; i < len; i++) {
+
+        jobjectArray current = (jobjectArray) env->GetObjectArrayElement(keys, i);
+        lKeys.push_back(convertPair(env, current));
+    }
+
+    return lKeys;
+}
+
 #endif //LIBSALTPACK_JNI_COMMONS_H

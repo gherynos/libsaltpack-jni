@@ -49,6 +49,22 @@ JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
+ * Method:    constructor
+ * Signature: (Lnet/nharyes/libsaltpack/OutputParameters;[B[[B[[[B)J
+ */
+JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3B_3_3_3B
+  (JNIEnv *, jobject, jobject, jbyteArray, jobjectArray, jobjectArray);
+
+/*
+ * Class:     net_nharyes_libsaltpack_MessageWriter
+ * Method:    constructor
+ * Signature: (Lnet/nharyes/libsaltpack/OutputParameters;[[B[[[B)J
+ */
+JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3B_3_3_3B
+  (JNIEnv *, jobject, jobject, jobjectArray, jobjectArray);
+
+/*
+ * Class:     net_nharyes_libsaltpack_MessageWriter
  * Method:    destructor
  * Signature: (J)V
  */
@@ -58,18 +74,10 @@ JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_destructor
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
  * Method:    addBlock
- * Signature: (J[B)V
+ * Signature: (J[BZ)V
  */
 JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_addBlock
-  (JNIEnv *, jobject, jlong, jbyteArray);
-
-/*
- * Class:     net_nharyes_libsaltpack_MessageWriter
- * Method:    finalise
- * Signature: (J)V
- */
-JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_finalise
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong, jbyteArray, jboolean);
 
 #ifdef __cplusplus
 }
