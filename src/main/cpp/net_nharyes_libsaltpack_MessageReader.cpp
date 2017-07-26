@@ -116,6 +116,8 @@ jlong Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsa
         else
             objs->mr = new saltpack::MessageReader(*objs->ain, recipientSecretkey);
 
+        sodium_memzero(recipientSecretkey.data(), recipientSecretkey.size());
+
         return (long) objs;
 
     } catch (...) {
@@ -224,19 +226,23 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
                                                                                                            jobject obj,
                                                                                                            jobject in,
                                                                                                            jbyteArray recipientSecretkeyA,
-                                                                                                           jobjectArray key) {
+                                                                                                           jobjectArray keyA) {
 
     RObjects *objs = NULL;
     try {
 
         saltpack::BYTE_ARRAY recipientSecretkey = copyBytes(env, recipientSecretkeyA);
+        std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> key = convertPair(env, keyA);
 
         objs = populateInputStreams(env, in);
 
         if (objs->ain == NULL)
-            objs->mr = new saltpack::MessageReader(*objs->iw, recipientSecretkey, convertPair(env, key));
+            objs->mr = new saltpack::MessageReader(*objs->iw, recipientSecretkey, key);
         else
-            objs->mr = new saltpack::MessageReader(*objs->ain, recipientSecretkey, convertPair(env, key));
+            objs->mr = new saltpack::MessageReader(*objs->ain, recipientSecretkey, key);
+
+        sodium_memzero(recipientSecretkey.data(), recipientSecretkey.size());
+        sodium_memzero(key.second.data(), key.second.size());
 
         return (long) objs;
 

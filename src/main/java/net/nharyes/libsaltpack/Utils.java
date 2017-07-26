@@ -34,6 +34,9 @@ public class Utils {
         }
     }
 
+    private Utils() {
+    }
+
     /**
      * Generates an encryption keypair using `libsodium`.
      *

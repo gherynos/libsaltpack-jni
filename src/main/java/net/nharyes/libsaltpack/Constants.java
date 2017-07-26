@@ -21,6 +21,9 @@ package net.nharyes.libsaltpack;
  */
 public class Constants {
 
+    private Constants() {
+    }
+
     /**
      * Constant defining the size of a public key used when encrypting/decrypting a message with {@link net.nharyes.libsaltpack.MessageWriter} and {@link net.nharyes.libsaltpack.MessageReader}.
      */

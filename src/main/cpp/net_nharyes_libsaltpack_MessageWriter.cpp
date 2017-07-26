@@ -142,6 +142,8 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
             objs->mw = new saltpack::MessageWriter(*objs->aout, senderSecretkey, convertRecipients(env, recipients),
                                                    (bool) visibleRecipients);
 
+        sodium_memzero(senderSecretkey.data(), senderSecretkey.size());
+
     } catch (...) {
 
         deleteWObjects(env, objs);
@@ -184,6 +186,8 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
             objs->mw = new saltpack::MessageWriter(*objs->ow, senderSecretkey, convertRecipients(env, recipients));
         else
             objs->mw = new saltpack::MessageWriter(*objs->aout, senderSecretkey, convertRecipients(env, recipients));
+
+        sodium_memzero(senderSecretkey.data(), senderSecretkey.size());
 
     } catch (...) {
 
@@ -313,6 +317,8 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
         else
             objs->mw = new saltpack::MessageWriter(*objs->aout, senderSecretkey, ds);
 
+        sodium_memzero(senderSecretkey.data(), senderSecretkey.size());
+
     } catch (...) {
 
         deleteWObjects(env, objs);
@@ -339,21 +345,24 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
 
 jlong
 Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3B_3_3_3B(
-        JNIEnv *env, jobject obj, jobject op, jbyteArray senderSecretkeyA, jobjectArray recipients, jobjectArray keys) {
+        JNIEnv *env, jobject obj, jobject op, jbyteArray senderSecretkeyA, jobjectArray recipients, jobjectArray keysA) {
 
     WObjects *objs = NULL;
     try {
 
         saltpack::BYTE_ARRAY senderSecretkey = copyBytes(env, senderSecretkeyA);
+        std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> keys = convertKeys(env, keysA);
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
         if (objs->aout == NULL)
-            objs->mw = new saltpack::MessageWriter(*objs->ow, senderSecretkey, convertRecipients(env, recipients),
-                                                   convertKeys(env, keys));
+            objs->mw = new saltpack::MessageWriter(*objs->ow, senderSecretkey, convertRecipients(env, recipients), keys);
         else
-            objs->mw = new saltpack::MessageWriter(*objs->aout, senderSecretkey, convertRecipients(env, recipients),
-                                                   convertKeys(env, keys));
+            objs->mw = new saltpack::MessageWriter(*objs->aout, senderSecretkey, convertRecipients(env, recipients), keys);
+
+        sodium_memzero(senderSecretkey.data(), senderSecretkey.size());
+        for (std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> key: keys)
+            sodium_memzero(key.second.data(), key.second.size());
 
     } catch (...) {
 
@@ -380,19 +389,22 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
 }
 
 jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3B_3_3_3B(
-        JNIEnv *env, jobject obj, jobject op, jobjectArray recipients, jobjectArray keys) {
+        JNIEnv *env, jobject obj, jobject op, jobjectArray recipients, jobjectArray keysA) {
 
     WObjects *objs = NULL;
     try {
 
+        std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> keys = convertKeys(env, keysA);
+
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
         if (objs->aout == NULL)
-            objs->mw = new saltpack::MessageWriter(*objs->ow, convertRecipients(env, recipients),
-                                                   convertKeys(env, keys));
+            objs->mw = new saltpack::MessageWriter(*objs->ow, convertRecipients(env, recipients), keys);
         else
-            objs->mw = new saltpack::MessageWriter(*objs->aout, convertRecipients(env, recipients),
-                                                   convertKeys(env, keys));
+            objs->mw = new saltpack::MessageWriter(*objs->aout, convertRecipients(env, recipients), keys);
+
+        for (std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> key: keys)
+            sodium_memzero(key.second.data(), key.second.size());
 
     } catch (...) {
 
