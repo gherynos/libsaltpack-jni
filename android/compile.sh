@@ -1,9 +1,9 @@
 #!/bin/bash
 
-NDK_VER=r12b
-LIBSODIUM_VER=1.0.11
+NDK_VER=r14b
+LIBSODIUM_VER=stable
 LIBGMP_VER=6.1.2
-MSGPACK_VER=2.1.1
+MSGPACK_VER=2.1.5
 LIBSALTPACK_VER=0.2.2
 
 PT=/opt/libsaltpack-jni/android/tmp
@@ -34,7 +34,7 @@ if [ ! -e "$PT/libsodium-$LIBSODIUM_VER" ]
 then
     if [ ! -e "$PT/libsodium-$LIBSODIUM_VER.tar.gz" ]
     then
-        wget https://download.libsodium.org/libsodium/releases/libsodium-$LIBSODIUM_VER.tar.gz
+        wget https://download.libsodium.org/libsodium/releases/LATEST.tar.gz -O libsodium-$LIBSODIUM_VER.tar.gz
     fi
     tar -xvzf libsodium-$LIBSODIUM_VER.tar.gz
     cd libsodium-$LIBSODIUM_VER
@@ -61,7 +61,7 @@ then
     tar -xvjf gmp-$LIBGMP_VER.tar.bz2
     cd gmp-$LIBGMP_VER
     ARCH=("armv6" "armv7-a" "armv8-a" "i686" "mips32" "mips64r6" "westmere")
-    HOST=("arm-linux-androideabi" "arm-linux-androideabi" "aarch64-linux-android" "i686-linux-android" "mipsel-linux-android" "mips64el-linux-android" "x86_64-linux-android")
+    HOST=("arm-linux-androideabi" "arm-linux-androideabi" "aarch64-linux-android" "i686-linux-android" "mips64el-linux-android" "mips64el-linux-android" "x86_64-linux-android")
     for i in `seq 0 6`;
     do
         arch=${ARCH[i]}
@@ -72,8 +72,8 @@ then
 
         PATH=$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin:$PATH
         SYSROOT=$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/sysroot
-        CC="$host-gcc --sysroot $SYSROOT"
-        CXX="$host-g++ --sysroot $SYSROOT"
+        CC="$host-clang --sysroot $SYSROOT"
+        CXX="$host-clang++ --sysroot $SYSROOT"
         AR="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ar"
         RANLIB="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ranlib"
 
