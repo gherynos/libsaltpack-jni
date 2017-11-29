@@ -90,10 +90,10 @@ JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_Utils_generateRandomBy
 /*
  * Class:     net_nharyes_libsaltpack_Utils
  * Method:    deriveKeyFromPassword
- * Signature: (JLjava/lang/String;[BJJ)[B
+ * Signature: (J[C[BJJ)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_Utils_deriveKeyFromPassword
-  (JNIEnv *, jclass, jlong, jstring, jbyteArray, jlong, jlong);
+  (JNIEnv *, jclass, jlong, jcharArray, jbyteArray, jlong, jlong);
 
 #ifdef __cplusplus
 }

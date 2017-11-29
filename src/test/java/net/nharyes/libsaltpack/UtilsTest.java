@@ -153,22 +153,22 @@ public class UtilsTest {
 
         assertEquals(salt.length, Constants.CRYPTO_PWHASH_SALTBYTES);
 
-        byte[] key = Utils.deriveKeyFromPassword(128, "The passW0rd", salt,
+        byte[] key = Utils.deriveKeyFromPassword(128, "The passW0rd".toCharArray(), salt,
                 Constants.CRYPTO_PWHASH_OPSLIMIT_MODERATE, Constants.CRYPTO_PWHASH_MEMLIMIT_MODERATE);
 
         assertEquals(key.length, 128);
 
-        byte[] key2 = Utils.deriveKeyFromPassword(128, "The passw0rd", salt,
+        byte[] key2 = Utils.deriveKeyFromPassword(128, "The passw0rd".toCharArray(), salt,
                 Constants.CRYPTO_PWHASH_OPSLIMIT_MODERATE, Constants.CRYPTO_PWHASH_MEMLIMIT_MODERATE);
 
         Assert.assertThat(key, IsNot.not(IsEqual.equalTo(key2)));
 
-        byte[] key3 = Utils.deriveKeyFromPassword(128, "The passW0rd", salt,
+        byte[] key3 = Utils.deriveKeyFromPassword(128, "The passW0rd".toCharArray(), salt,
                 Constants.CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE, Constants.CRYPTO_PWHASH_MEMLIMIT_MODERATE);
 
         Assert.assertThat(key, IsNot.not(IsEqual.equalTo(key3)));
 
-        key = Utils.deriveKeyFromPassword(Constants.CRYPTO_BOX_SECRETKEYBYTES, "The passW0rd", salt,
+        key = Utils.deriveKeyFromPassword(Constants.CRYPTO_BOX_SECRETKEYBYTES, "The passW0rd".toCharArray(), salt,
                 Constants.CRYPTO_PWHASH_OPSLIMIT_MODERATE, Constants.CRYPTO_PWHASH_MEMLIMIT_MODERATE);
 
         assertEquals(key.length, Constants.CRYPTO_BOX_SECRETKEYBYTES);

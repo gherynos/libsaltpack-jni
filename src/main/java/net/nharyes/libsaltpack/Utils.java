@@ -143,5 +143,5 @@ public class Utils {
      * @return the derived key.
      * @throws SaltpackException
      */
-    public static native byte[] deriveKeyFromPassword(long keySize, String password, byte[] salt, long opsLimit, long memLimit) throws SaltpackException;
+    public static native byte[] deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit) throws SaltpackException;
 }

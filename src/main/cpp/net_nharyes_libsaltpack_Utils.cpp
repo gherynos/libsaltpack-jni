@@ -332,18 +332,25 @@ jbyteArray Java_net_nharyes_libsaltpack_Utils_generateRandomBytes(JNIEnv *env, j
 }
 
 jbyteArray
-Java_net_nharyes_libsaltpack_Utils_deriveKeyFromPassword(JNIEnv *env, jclass cls, jlong keySize, jstring passwordS,
+Java_net_nharyes_libsaltpack_Utils_deriveKeyFromPassword(JNIEnv *env, jclass cls, jlong keySize, jcharArray passwordA,
                                                          jbyteArray saltA, jlong opsLimit, jlong memLimit) {
 
     try {
 
-        std::string password(env->GetStringUTFChars(passwordS, 0));
+        size_t size = GET_BYTES_SIZE(passwordA);
+        jchar buf[size];
+        env->GetCharArrayRegion(passwordA, 0, (jsize) size, buf);
+        if (env->ExceptionCheck())
+            throw saltpack::SaltpackException("errors while reading char array");
+        std::string password(buf);
 
         saltpack::BYTE_ARRAY salt = copyBytes(env, saltA);
 
         saltpack::BYTE_ARRAY
                 out = saltpack::Utils::deriveKeyFromPassword((unsigned long long int) keySize, password, salt,
                                                              (unsigned long long int) opsLimit, (size_t) memLimit);
+
+        sodium_memzero(password.c_str(), password.size());
 
         return copyBytes(env, out);
 
