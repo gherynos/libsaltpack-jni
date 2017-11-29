@@ -10,7 +10,7 @@ PT=/opt/libsaltpack-jni/android/tmp
 cd $PT
 
 apt-get update
-apt-get install -y git zip unzip wget build-essential autoconf libtool
+apt-get install -y git zip unzip wget build-essential autoconf libtool python
 
 # Android NDK
 echo "Android NDK"
