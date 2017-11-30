@@ -61,7 +61,7 @@ then
     tar -xvjf gmp-$LIBGMP_VER.tar.bz2
     cd gmp-$LIBGMP_VER
     ARCH=("armv6" "armv7-a" "armv8-a" "i686" "mips32" "mips64r6" "westmere")
-    HOST=("arm-linux-androideabi" "arm-linux-androideabi" "aarch64-linux-android" "i686-linux-android" "mips64el-linux-android" "mips64el-linux-android" "x86_64-linux-android")
+    HOST=("arm-linux-androideabi" "arm-linux-androideabi" "aarch64-linux-android" "i686-linux-android" "mipsel-linux-android" "mips64el-linux-android" "x86_64-linux-android")
     for i in `seq 0 6`;
     do
         arch=${ARCH[i]}
@@ -72,10 +72,10 @@ then
 
         PATH=$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin:$PATH
         SYSROOT=$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/sysroot
-        CC="$host-clang --sysroot $SYSROOT"
-        CXX="$host-clang++ --sysroot $SYSROOT"
-        AR="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ar"
-        RANLIB="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ranlib"
+        export CC="$host-clang --sysroot $SYSROOT"
+        export CXX="$host-clang++ --sysroot $SYSROOT"
+        export AR="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ar"
+        export RANLIB="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ranlib"
 
         $PT/gmp-$LIBGMP_VER/./configure --host=$host --disable-assembly --enable-cxx --prefix=$PT/gmp-$LIBGMP_VER/libgmp-android-$arch
         make
