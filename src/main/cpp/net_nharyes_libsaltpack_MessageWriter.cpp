@@ -129,9 +129,10 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
         jboolean visibleRecipients) {
 
     WObjects *objs = NULL;
+    saltpack::BYTE_ARRAY senderSecretkey;
     try {
 
-        saltpack::BYTE_ARRAY senderSecretkey = copyBytes(env, senderSecretkeyA);
+        senderSecretkey = copyBytes(env, senderSecretkeyA);
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
@@ -147,6 +148,7 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
     } catch (...) {
 
         deleteWObjects(env, objs);
+        sodium_memzero(senderSecretkey.data(), senderSecretkey.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
@@ -176,9 +178,10 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
                                                                                                             jobjectArray recipients) {
 
     WObjects *objs = NULL;
+    saltpack::BYTE_ARRAY senderSecretkey;
     try {
 
-        saltpack::BYTE_ARRAY senderSecretkey = copyBytes(env, senderSecretkeyA);
+        senderSecretkey = copyBytes(env, senderSecretkeyA);
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
@@ -192,6 +195,7 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
     } catch (...) {
 
         deleteWObjects(env, objs);
+        sodium_memzero(senderSecretkey.data(), senderSecretkey.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
@@ -304,9 +308,10 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
                                                                                                         jboolean detatchedSignature) {
 
     WObjects *objs = NULL;
+    saltpack::BYTE_ARRAY senderSecretkey;
     try {
 
-        saltpack::BYTE_ARRAY senderSecretkey = copyBytes(env, senderSecretkeyA);
+        senderSecretkey = copyBytes(env, senderSecretkeyA);
 
         bool ds = (bool) detatchedSignature;
         objs = populateOutputStreams(env, op,
@@ -322,6 +327,7 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
     } catch (...) {
 
         deleteWObjects(env, objs);
+        sodium_memzero(senderSecretkey.data(), senderSecretkey.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
@@ -348,10 +354,12 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
         JNIEnv *env, jobject obj, jobject op, jbyteArray senderSecretkeyA, jobjectArray recipients, jobjectArray keysA) {
 
     WObjects *objs = NULL;
+    saltpack::BYTE_ARRAY senderSecretkey;
+    std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> keys;
     try {
 
-        saltpack::BYTE_ARRAY senderSecretkey = copyBytes(env, senderSecretkeyA);
-        std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> keys = convertKeys(env, keysA);
+        senderSecretkey = copyBytes(env, senderSecretkeyA);
+        keys = convertKeys(env, keysA);
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
@@ -366,7 +374,11 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
 
     } catch (...) {
 
+
         deleteWObjects(env, objs);
+        sodium_memzero(senderSecretkey.data(), senderSecretkey.size());
+        for (std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> key: keys)
+            sodium_memzero(key.second.data(), key.second.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
@@ -392,9 +404,10 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
         JNIEnv *env, jobject obj, jobject op, jobjectArray recipients, jobjectArray keysA) {
 
     WObjects *objs = NULL;
+    std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> keys;
     try {
 
-        std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> keys = convertKeys(env, keysA);
+        keys = convertKeys(env, keysA);
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
@@ -409,6 +422,8 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
     } catch (...) {
 
         deleteWObjects(env, objs);
+        for (std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> key: keys)
+            sodium_memzero(key.second.data(), key.second.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)

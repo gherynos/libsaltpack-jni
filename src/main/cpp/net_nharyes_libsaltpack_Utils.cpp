@@ -21,10 +21,9 @@
 void Java_net_nharyes_libsaltpack_Utils_generateKeypair(JNIEnv *env, jclass cls, jbyteArray publickeyA,
                                                         jbyteArray secretkeyA) {
 
+    saltpack::BYTE_ARRAY publickey(GET_BYTES_SIZE(publickeyA));
+    saltpack::BYTE_ARRAY secretkey(GET_BYTES_SIZE(secretkeyA));
     try {
-
-        saltpack::BYTE_ARRAY publickey(GET_BYTES_SIZE(publickeyA));
-        saltpack::BYTE_ARRAY secretkey(GET_BYTES_SIZE(secretkeyA));
 
         saltpack::Utils::generateKeypair(publickey, secretkey);
 
@@ -35,6 +34,9 @@ void Java_net_nharyes_libsaltpack_Utils_generateKeypair(JNIEnv *env, jclass cls,
         sodium_memzero(secretkey.data(), secretkey.size());
 
     } catch (...) {
+
+        sodium_memzero(publickey.data(), publickey.size());
+        sodium_memzero(secretkey.data(), secretkey.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
@@ -55,10 +57,9 @@ void Java_net_nharyes_libsaltpack_Utils_generateKeypair(JNIEnv *env, jclass cls,
 void Java_net_nharyes_libsaltpack_Utils_generateSignKeypair(JNIEnv *env, jclass cls, jbyteArray publickeyA,
                                                             jbyteArray secretkeyA) {
 
+    saltpack::BYTE_ARRAY publickey(GET_BYTES_SIZE(publickeyA));
+    saltpack::BYTE_ARRAY secretkey(GET_BYTES_SIZE(secretkeyA));
     try {
-
-        saltpack::BYTE_ARRAY publickey(GET_BYTES_SIZE(publickeyA));
-        saltpack::BYTE_ARRAY secretkey(GET_BYTES_SIZE(secretkeyA));
 
         saltpack::Utils::generateSignKeypair(publickey, secretkey);
 
@@ -69,6 +70,9 @@ void Java_net_nharyes_libsaltpack_Utils_generateSignKeypair(JNIEnv *env, jclass 
         sodium_memzero(secretkey.data(), secretkey.size());
 
     } catch (...) {
+
+        sodium_memzero(publickey.data(), publickey.size());
+        sodium_memzero(secretkey.data(), secretkey.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
@@ -88,9 +92,10 @@ void Java_net_nharyes_libsaltpack_Utils_generateSignKeypair(JNIEnv *env, jclass 
 
 jbyteArray Java_net_nharyes_libsaltpack_Utils_derivePublickey(JNIEnv *env, jclass cls, jbyteArray secretkeyA) {
 
+    saltpack::BYTE_ARRAY secretkey;
     try {
 
-        saltpack::BYTE_ARRAY secretkey = copyBytes(env, secretkeyA);
+        secretkey = copyBytes(env, secretkeyA);
         saltpack::BYTE_ARRAY publikey = saltpack::Utils::derivePublickey(secretkey);
 
         jbyteArray out = copyBytes(env, publikey);
@@ -100,6 +105,8 @@ jbyteArray Java_net_nharyes_libsaltpack_Utils_derivePublickey(JNIEnv *env, jclas
         return out;
 
     } catch (...) {
+
+        sodium_memzero(secretkey.data(), secretkey.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
@@ -335,14 +342,22 @@ jbyteArray
 Java_net_nharyes_libsaltpack_Utils_deriveKeyFromPassword(JNIEnv *env, jclass cls, jlong keySize, jcharArray passwordA,
                                                          jbyteArray saltA, jlong opsLimit, jlong memLimit) {
 
+    std::string password;
     try {
+
+        if (sodium_init() == -1)
+            throw saltpack::SaltpackException("Unable to initialise libsodium.");
 
         size_t size = GET_BYTES_SIZE(passwordA);
         jchar buf[size];
         env->GetCharArrayRegion(passwordA, 0, (jsize) size, buf);
         if (env->ExceptionCheck())
             throw saltpack::SaltpackException("errors while reading char array");
-        std::string password(buf);
+
+        password = std::string(size, ' ');
+        for (size_t i = 0; i < size; i++)
+            password[i] = (char) buf[i];
+        sodium_memzero(buf, size);
 
         saltpack::BYTE_ARRAY salt = copyBytes(env, saltA);
 
@@ -350,11 +365,13 @@ Java_net_nharyes_libsaltpack_Utils_deriveKeyFromPassword(JNIEnv *env, jclass cls
                 out = saltpack::Utils::deriveKeyFromPassword((unsigned long long int) keySize, password, salt,
                                                              (unsigned long long int) opsLimit, (size_t) memLimit);
 
-        sodium_memzero(password.c_str(), password.size());
+        sodium_memzero(&password[0], password.length());
 
         return copyBytes(env, out);
 
     } catch (...) {
+
+        sodium_memzero(&password[0], password.length());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)

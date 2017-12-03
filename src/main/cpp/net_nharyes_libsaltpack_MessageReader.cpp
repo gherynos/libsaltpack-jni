@@ -105,9 +105,10 @@ jlong Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsa
                                                                                                             jbyteArray recipientSecretkeyA) {
 
     RObjects *objs = NULL;
+    saltpack::BYTE_ARRAY recipientSecretkey;
     try {
 
-        saltpack::BYTE_ARRAY recipientSecretkey = copyBytes(env, recipientSecretkeyA);
+        recipientSecretkey = copyBytes(env, recipientSecretkeyA);
 
         objs = populateInputStreams(env, in);
 
@@ -123,6 +124,7 @@ jlong Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsa
     } catch (...) {
 
         deleteRObjects(env, objs);
+        sodium_memzero(recipientSecretkey.data(), recipientSecretkey.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
@@ -229,10 +231,12 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
                                                                                                            jobjectArray keyA) {
 
     RObjects *objs = NULL;
+    saltpack::BYTE_ARRAY recipientSecretkey;
+    std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> key;
     try {
 
-        saltpack::BYTE_ARRAY recipientSecretkey = copyBytes(env, recipientSecretkeyA);
-        std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> key = convertPair(env, keyA);
+        recipientSecretkey = copyBytes(env, recipientSecretkeyA);
+        key = convertPair(env, keyA);
 
         objs = populateInputStreams(env, in);
 
@@ -249,6 +253,8 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
     } catch (...) {
 
         deleteRObjects(env, objs);
+        sodium_memzero(recipientSecretkey.data(), recipientSecretkey.size());
+        sodium_memzero(key.second.data(), key.second.size());
 
         std::exception_ptr ex = std::current_exception();
         if (ex)
