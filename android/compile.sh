@@ -1,16 +1,16 @@
 #!/bin/bash
 
-NDK_VER=r12b
-LIBSODIUM_VER=1.0.11
+NDK_VER=r14b
+LIBSODIUM_VER=stable
 LIBGMP_VER=6.1.2
-MSGPACK_VER=2.1.1
+MSGPACK_VER=2.1.5
 LIBSALTPACK_VER=0.2.2
 
 PT=/opt/libsaltpack-jni/android/tmp
 cd $PT
 
 apt-get update
-apt-get install -y git zip unzip wget build-essential autoconf libtool
+apt-get install -y git zip unzip wget build-essential autoconf libtool python
 
 # Android NDK
 echo "Android NDK"
@@ -34,7 +34,7 @@ if [ ! -e "$PT/libsodium-$LIBSODIUM_VER" ]
 then
     if [ ! -e "$PT/libsodium-$LIBSODIUM_VER.tar.gz" ]
     then
-        wget https://download.libsodium.org/libsodium/releases/libsodium-$LIBSODIUM_VER.tar.gz
+        wget https://download.libsodium.org/libsodium/releases/LATEST.tar.gz -O libsodium-$LIBSODIUM_VER.tar.gz
     fi
     tar -xvzf libsodium-$LIBSODIUM_VER.tar.gz
     cd libsodium-$LIBSODIUM_VER
@@ -72,10 +72,10 @@ then
 
         PATH=$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin:$PATH
         SYSROOT=$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/sysroot
-        CC="$host-gcc --sysroot $SYSROOT"
-        CXX="$host-g++ --sysroot $SYSROOT"
-        AR="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ar"
-        RANLIB="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ranlib"
+        export CC="$host-clang --sysroot $SYSROOT"
+        export CXX="$host-clang++ --sysroot $SYSROOT"
+        export AR="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ar"
+        export RANLIB="$PT/libsodium-$LIBSODIUM_VER/android-toolchain-$arch/bin/$host-ranlib"
 
         $PT/gmp-$LIBGMP_VER/./configure --host=$host --disable-assembly --enable-cxx --prefix=$PT/gmp-$LIBGMP_VER/libgmp-android-$arch
         make
