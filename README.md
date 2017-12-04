@@ -10,6 +10,8 @@ Dependencies
 * [msgpack](https://github.com/msgpack/msgpack-c) >= 2.0.0
 * [GMP](https://gmplib.org/) >= 6.0.0 (or [MPIR](http://mpir.org/) >= 2.6.0 on Windows)
 
+`libsodium` and `GMP` should be compiled with PIC enabled (```./configure --with-pic```). 
+
 Building
 --------
 

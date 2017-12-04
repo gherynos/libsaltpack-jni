@@ -65,14 +65,14 @@ public class Constants {
     public static final String ALPHABET_BASE85 = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstu";
 
     /**
-     * Constant defining the length of the salt required by {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, String password, byte[] salt, long opsLimit, long memLimit)}.
+     * Constant defining the length of the salt required by {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      */
     public static final int CRYPTO_PWHASH_SALTBYTES = 16;
 
     /**
      * Constant defining the maximum amount of computations.
      * <p>
-     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, String password, byte[] salt, long opsLimit, long memLimit)}.
+     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      * </p>
      */
     public static final int CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE = 4;
@@ -80,7 +80,7 @@ public class Constants {
     /**
      * Constant defining the maximum amount of RAM.
      * <p>
-     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, String password, byte[] salt, long opsLimit, long memLimit)}.
+     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      * </p>
      */
     public static final int CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE = 33554432;
@@ -88,7 +88,7 @@ public class Constants {
     /**
      * Constant defining the maximum amount of computations.
      * <p>
-     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, String password, byte[] salt, long opsLimit, long memLimit)}.
+     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      * </p>
      */
     public static final int CRYPTO_PWHASH_OPSLIMIT_MODERATE = 6;
@@ -96,7 +96,7 @@ public class Constants {
     /**
      * Constant defining the maximum amount of RAM.
      * <p>
-     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, String password, byte[] salt, long opsLimit, long memLimit)}.
+     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      * </p>
      */
     public static final int CRYPTO_PWHASH_MEMLIMIT_MODERATE = 134217728;
@@ -104,7 +104,7 @@ public class Constants {
     /**
      * Constant defining the maximum amount of computations.
      * <p>
-     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, String password, byte[] salt, long opsLimit, long memLimit)}.
+     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      * </p>
      */
     public static final int CRYPTO_PWHASH_OPSLIMIT_SENSITIVE = 8;
@@ -112,7 +112,7 @@ public class Constants {
     /**
      * Constant defining the maximum amount of RAM.
      * <p>
-     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, String password, byte[] salt, long opsLimit, long memLimit)}.
+     * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      * </p>
      */
     public static final int CRYPTO_PWHASH_MEMLIMIT_SENSITIVE = 536870912;
