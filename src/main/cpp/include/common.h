@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
 inline jclass loadClass(JNIEnv *env, const char *cls) {
 
     jclass res = env->FindClass(cls);
-    if (res == NULL)
+    if (res == nullptr)
         throw saltpack::SaltpackException(std::string("class not found: ") + cls);
 
     return res;
@@ -40,7 +40,7 @@ inline jclass loadClass(JNIEnv *env, const char *cls) {
 inline jmethodID loadMethod(JNIEnv *env, jclass cls, const char *method, const char *sig) {
 
     jmethodID res = env->GetMethodID(cls, method, sig);
-    if (res == NULL)
+    if (res == nullptr)
         throw saltpack::SaltpackException(std::string("method not found: ") + method);
 
     return res;
@@ -61,9 +61,9 @@ inline saltpack::BYTE_ARRAY copyBytes(JNIEnv *env, jbyteArray array) {
 inline jbyteArray copyBytes(JNIEnv *env, saltpack::BYTE_ARRAY array) {
 
     jbyteArray out = env->NewByteArray((jsize) array.size());
-    if (out == NULL) {
+    if (out == nullptr) {
 
-        return NULL; /* out of memory error thrown */
+        return nullptr; /* out of memory error thrown */
     }
 
     env->SetByteArrayRegion(out, 0, (jsize) array.size(), (const jbyte *) array.data());
@@ -79,7 +79,7 @@ inline std::list<saltpack::BYTE_ARRAY> convertRecipients(JNIEnv *env, jobjectArr
     std::list<saltpack::BYTE_ARRAY> lRecipients;
     for (jsize i = 0; i < len; i++) {
 
-        jbyteArray rec = (jbyteArray) env->GetObjectArrayElement(recipients, i);
+        auto rec = (jbyteArray) env->GetObjectArrayElement(recipients, i);
 
         saltpack::BYTE_ARRAY recipient = copyBytes(env, rec);
         lRecipients.push_back(recipient);
@@ -94,8 +94,8 @@ inline std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> convertPair(JNIEnv 
     if (len != 2)
         return std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>();
 
-    jbyteArray pair1 = (jbyteArray) env->GetObjectArrayElement(pair, 0);
-    jbyteArray pair2 = (jbyteArray) env->GetObjectArrayElement(pair, 1);
+    auto pair1 = (jbyteArray) env->GetObjectArrayElement(pair, 0);
+    auto pair2 = (jbyteArray) env->GetObjectArrayElement(pair, 1);
 
     saltpack::BYTE_ARRAY pair1A = copyBytes(env, pair1);
     saltpack::BYTE_ARRAY pair2A = copyBytes(env, pair2);
@@ -109,7 +109,7 @@ inline std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> convertK
     std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> lKeys;
     for (jsize i = 0; i < len; i++) {
 
-        jobjectArray current = (jobjectArray) env->GetObjectArrayElement(keys, i);
+        auto current = (jobjectArray) env->GetObjectArrayElement(keys, i);
         lKeys.push_back(convertPair(env, current));
     }
 

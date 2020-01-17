@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,7 +122,7 @@ jbyteArray Java_net_nharyes_libsaltpack_Utils_derivePublickey(JNIEnv *env, jclas
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -182,7 +182,7 @@ Java_net_nharyes_libsaltpack_Utils_baseXencode___3BLjava_lang_String_2(JNIEnv *e
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -215,7 +215,7 @@ Java_net_nharyes_libsaltpack_Utils_baseXencode___3BILjava_lang_String_2(JNIEnv *
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -246,7 +246,7 @@ jbyteArray Java_net_nharyes_libsaltpack_Utils_baseXdecode(JNIEnv *env, jclass cl
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -276,7 +276,7 @@ jbyteArray Java_net_nharyes_libsaltpack_Utils_hexToBin(JNIEnv *env, jclass cls, 
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -306,7 +306,7 @@ jstring Java_net_nharyes_libsaltpack_Utils_binToHex(JNIEnv *env, jclass cls, jby
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -334,7 +334,7 @@ jbyteArray Java_net_nharyes_libsaltpack_Utils_generateRandomBytes(JNIEnv *env, j
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -387,6 +387,6 @@ Java_net_nharyes_libsaltpack_Utils_deriveKeyFromPassword(JNIEnv *env, jclass cls
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }

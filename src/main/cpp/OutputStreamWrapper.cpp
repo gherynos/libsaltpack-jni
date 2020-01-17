@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ void OutputStreamWrapper::finalise() {
 void OutputStreamWrapper::writeToOutput() {
 
     jbyteArray out = env->NewByteArray((jsize) count);
-    if (out == NULL) {
+    if (out == nullptr) {
 
         return; /* out of memory error thrown */
     }

@@ -6,7 +6,7 @@
 
     <groupId>net.nharyes</groupId>
     <artifactId>libsaltpack-jni</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
 
     <name>libsaltpack-jni</name>
     <url>https://github.com/Gherynos/libsaltpack-jni</url>
@@ -15,7 +15,7 @@
         <developer>
             <id>gherynos</id>
             <name>Luca Zanconato</name>
-            <email>luca.zanconato@nharyes.net</email>
+            <email>luca.zanconato@naes.co</email>
         </developer>
     </developers>
 
@@ -27,7 +27,7 @@
     </licenses>
 
     <properties>
-        <github.user>Gherynos</github.user>
+        <github.user>gherynos</github.user>
         <github.repository>libsaltpack-jni</github.repository>
         <github.repository.url>http://github.com/${github.user}/${github.repository}</github.repository.url>
         <github.connection>scm:git:ssh://git@github.com/${github.user}/${github.repository}</github.connection>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ jmethodID mGetApp;
 
 RObjects *populateInputStreams(JNIEnv *env, jobject inputParameters) {
 
-    if (inputparameters == NULL) {
+    if (inputparameters == nullptr) {
 
         inputparameters = loadClass(env, "net/nharyes/libsaltpack/InputParameters");
         mGetInputStream = loadMethod(env, inputparameters, "getInputStream", "()Ljava/io/InputStream;");
@@ -46,7 +46,7 @@ RObjects *populateInputStreams(JNIEnv *env, jobject inputParameters) {
         mGetApp = loadMethod(env, inputparameters, "getApp", "()Ljava/lang/String;");
     }
 
-    RObjects *objs = new RObjects();
+    auto *objs = new RObjects();
 
     objs->inputStream = env->NewGlobalRef(env->CallObjectMethod(inputParameters, mGetInputStream));
     objs->iw = new InputStreamWrapper(env, objs->inputStream);
@@ -59,7 +59,7 @@ RObjects *populateInputStreams(JNIEnv *env, jobject inputParameters) {
         jobject oApp = env->CallObjectMethod(inputParameters, mGetApp);
         if (env->ExceptionCheck())
             throw saltpack::SaltpackException("exception thrown while checking application name");
-        if (oApp != NULL) {
+        if (oApp != nullptr) {
 
             const char *appCStr = env->GetStringUTFChars((jstring) oApp, 0);
             if (env->ExceptionCheck())
@@ -78,23 +78,20 @@ RObjects *populateInputStreams(JNIEnv *env, jobject inputParameters) {
 
 void deleteRObjects(JNIEnv *env, RObjects *objs) {
 
-    if (objs == NULL)
+    if (objs == nullptr)
         return;
 
-    if (objs->ain != NULL)
-        delete objs->ain;
+    delete objs->ain;
 
-    if (objs->inputStream != NULL)
+    if (objs->inputStream != nullptr)
         env->DeleteGlobalRef(objs->inputStream);
 
-    if (objs->messageIn != NULL)
+    if (objs->messageIn != nullptr)
         env->DeleteGlobalRef(objs->messageIn);
 
-    if (objs->iw != NULL)
-        delete objs->iw;
+    delete objs->iw;
 
-    if (objs->mw != NULL)
-        delete objs->mw;
+    delete objs->mw;
 
     delete objs;
 }
@@ -104,7 +101,7 @@ jlong Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsa
                                                                                                             jobject in,
                                                                                                             jbyteArray recipientSecretkeyA) {
 
-    RObjects *objs = NULL;
+    RObjects *objs = nullptr;
     saltpack::BYTE_ARRAY recipientSecretkey;
     try {
 
@@ -112,7 +109,7 @@ jlong Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsa
 
         objs = populateInputStreams(env, in);
 
-        if (objs->ain == NULL)
+        if (objs->ain == nullptr)
             objs->mr = new saltpack::MessageReader(*objs->iw, recipientSecretkey);
         else
             objs->mr = new saltpack::MessageReader(*objs->ain, recipientSecretkey);
@@ -148,12 +145,12 @@ jlong Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsa
                                                                                                          jobject obj,
                                                                                                          jobject in) {
 
-    RObjects *objs = NULL;
+    RObjects *objs = nullptr;
     try {
 
         objs = populateInputStreams(env, in);
 
-        if (objs->ain == NULL)
+        if (objs->ain == nullptr)
             objs->mr = new saltpack::MessageReader(*objs->iw);
         else
             objs->mr = new saltpack::MessageReader(*objs->ain);
@@ -186,7 +183,7 @@ jlong
 Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2Ljava_io_InputStream_2(
         JNIEnv *env, jobject obj, jobject in, jobject msgIn) {
 
-    RObjects *objs = NULL;
+    RObjects *objs = nullptr;
     try {
 
         objs = populateInputStreams(env, in);
@@ -194,7 +191,7 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
         objs->messageIn = env->NewGlobalRef(msgIn);
         objs->mw = new InputStreamWrapper(env, objs->messageIn);
 
-        if (objs->ain == NULL)
+        if (objs->ain == nullptr)
             objs->mr = new saltpack::MessageReader(*objs->iw, *objs->mw);
         else
             objs->mr = new saltpack::MessageReader(*objs->ain, *objs->mw);
@@ -230,7 +227,7 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
                                                                                                            jbyteArray recipientSecretkeyA,
                                                                                                            jobjectArray keyA) {
 
-    RObjects *objs = NULL;
+    RObjects *objs = nullptr;
     saltpack::BYTE_ARRAY recipientSecretkey;
     std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> key;
     try {
@@ -240,7 +237,7 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
 
         objs = populateInputStreams(env, in);
 
-        if (objs->ain == NULL)
+        if (objs->ain == nullptr)
             objs->mr = new saltpack::MessageReader(*objs->iw, recipientSecretkey, key);
         else
             objs->mr = new saltpack::MessageReader(*objs->ain, recipientSecretkey, key);
@@ -276,7 +273,7 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
 
 void Java_net_nharyes_libsaltpack_MessageReader_destructor(JNIEnv *env, jobject obj, jlong ptr) {
 
-    RObjects *objs = reinterpret_cast<RObjects *>(ptr);
+    auto objs = reinterpret_cast<RObjects *>(ptr);
 
     deleteRObjects(env, objs);
 }
@@ -285,7 +282,7 @@ jboolean Java_net_nharyes_libsaltpack_MessageReader_hasMoreBlocks(JNIEnv *env, j
 
     try {
 
-        RObjects *objs = reinterpret_cast<RObjects *>(ptr);
+        auto *objs = reinterpret_cast<RObjects *>(ptr);
 
         return (jboolean) objs->mr->hasMoreBlocks();
 
@@ -313,7 +310,7 @@ jbyteArray Java_net_nharyes_libsaltpack_MessageReader_getBlock(JNIEnv *env, jobj
 
     try {
 
-        RObjects *objs = reinterpret_cast<RObjects *>(ptr);
+        auto *objs = reinterpret_cast<RObjects *>(ptr);
         saltpack::BYTE_ARRAY data = objs->mr->getBlock();
 
         return copyBytes(env, data);
@@ -334,7 +331,7 @@ jbyteArray Java_net_nharyes_libsaltpack_MessageReader_getBlock(JNIEnv *env, jobj
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -342,13 +339,13 @@ jobjectArray Java_net_nharyes_libsaltpack_MessageReader_getRecipients(JNIEnv *en
 
     try {
 
-        RObjects *objs = reinterpret_cast<RObjects *>(ptr);
+        auto *objs = reinterpret_cast<RObjects *>(ptr);
         std::list<saltpack::BYTE_ARRAY> recipients = objs->mr->getRecipients();
 
         jobjectArray out = env->NewObjectArray((jsize) recipients.size(), BYTE_ARRAY_CLASS(env), env->NewByteArray(1));
-        if (out == NULL) {
+        if (out == nullptr) {
 
-            return NULL; /* out of memory error thrown */
+            return nullptr; /* out of memory error thrown */
         }
 
         // convert recipients
@@ -356,9 +353,9 @@ jobjectArray Java_net_nharyes_libsaltpack_MessageReader_getRecipients(JNIEnv *en
         for (saltpack::BYTE_ARRAY recipient: recipients) {
 
             jbyteArray rec = env->NewByteArray((jsize) recipient.size());
-            if (rec == NULL) {
+            if (rec == nullptr) {
 
-                return NULL; /* out of memory error thrown */
+                return nullptr; /* out of memory error thrown */
             }
 
             env->SetByteArrayRegion(rec, 0, (jsize) recipient.size(), (const jbyte *) recipient.data());
@@ -388,7 +385,7 @@ jobjectArray Java_net_nharyes_libsaltpack_MessageReader_getRecipients(JNIEnv *en
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -396,7 +393,7 @@ jbyteArray Java_net_nharyes_libsaltpack_MessageReader_getSender(JNIEnv *env, job
 
     try {
 
-        RObjects *objs = reinterpret_cast<RObjects *>(ptr);
+        auto *objs = reinterpret_cast<RObjects *>(ptr);
         saltpack::BYTE_ARRAY sender = objs->mr->getSender();
 
         return copyBytes(env, sender);
@@ -417,7 +414,7 @@ jbyteArray Java_net_nharyes_libsaltpack_MessageReader_getSender(JNIEnv *env, job
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -425,7 +422,7 @@ jboolean Java_net_nharyes_libsaltpack_MessageReader_isIntentionallyAnonymous(JNI
 
     try {
 
-        RObjects *objs = reinterpret_cast<RObjects *>(ptr);
+        auto *objs = reinterpret_cast<RObjects *>(ptr);
 
         return (jboolean) objs->mr->isIntentionallyAnonymous();
 

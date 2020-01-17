@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ InputStreamWrapper::InputStreamWrapper(JNIEnv *env, jobject inputStream) : std::
     dataSize = 0;
 
     jbyteArray local_jarray = env->NewByteArray(BUF_SIZE);
-    if (local_jarray == NULL) {
+    if (local_jarray == nullptr) {
 
         return; /* out of memory error thrown */
     }
@@ -49,7 +49,7 @@ int InputStreamWrapper::underflow() {
 
     try {
 
-        if (!dataReady && inputStream == NULL)
+        if (!dataReady && inputStream == nullptr)
             return std::istream::traits_type::eof();
 
         if (!dataReady) {
@@ -66,7 +66,7 @@ int InputStreamWrapper::underflow() {
 
             } else {
 
-                inputStream = NULL;
+                inputStream = nullptr;
                 return std::istream::traits_type::eof();
             }
         }

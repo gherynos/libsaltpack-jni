@@ -6,3 +6,4 @@ target/
 .classpath
 .settings
 *.iml
+cmake-build-debug

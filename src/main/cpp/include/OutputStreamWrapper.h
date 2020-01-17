@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ class OutputStreamWrapper : public std::ostream, std::streambuf {
 public:
     OutputStreamWrapper(JNIEnv *env, jobject outputStream);
 
-    virtual ~OutputStreamWrapper();
+    ~OutputStreamWrapper() override;
 
-    virtual int overflow(int __c) override;
+    int overflow(int __c) override;
 
     void finalise();
 

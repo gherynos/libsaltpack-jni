@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ jmethodID omGetWordsInPhrase;
 
 WObjects *populateOutputStreams(JNIEnv *env, jobject outputParameters, int mode) {
 
-    if (outputparameters == NULL) {
+    if (outputparameters == nullptr) {
 
         outputparameters = loadClass(env, "net/nharyes/libsaltpack/OutputParameters");
         omGetOutputStream = loadMethod(env, outputparameters, "getOutputStream", "()Ljava/io/OutputStream;");
@@ -49,7 +49,7 @@ WObjects *populateOutputStreams(JNIEnv *env, jobject outputParameters, int mode)
         omGetWordsInPhrase = loadMethod(env, outputparameters, "getWordsInPhrase", "()I");
     }
 
-    WObjects *objs = new WObjects();
+    auto *objs = new WObjects();
 
     objs->outputStream = env->NewGlobalRef(env->CallObjectMethod(outputParameters, omGetOutputStream));
     objs->ow = new OutputStreamWrapper(env, objs->outputStream);
@@ -79,7 +79,7 @@ WObjects *populateOutputStreams(JNIEnv *env, jobject outputParameters, int mode)
                 throw saltpack::SaltpackException("exception thrown while loading wordsInPhrase");
         }
 
-        if (oApp != NULL) {
+        if (oApp != nullptr) {
 
             const char *appCStr = env->GetStringUTFChars((jstring) oApp, 0);
             if (env->ExceptionCheck())
@@ -106,20 +106,17 @@ WObjects *populateOutputStreams(JNIEnv *env, jobject outputParameters, int mode)
 
 void deleteWObjects(JNIEnv *env, WObjects *objs) {
 
-    if (objs == NULL)
+    if (objs == nullptr)
         return;
 
-    if (objs->aout != NULL)
-        delete objs->aout;
+    delete objs->aout;
 
-    if (objs->outputStream != NULL)
+    if (objs->outputStream != nullptr)
         env->DeleteGlobalRef(objs->outputStream);
 
-    if (objs->ow != NULL)
-        delete objs->ow;
+    delete objs->ow;
 
-    if (objs->mw != NULL)
-        delete objs->mw;
+    delete objs->mw;
 
     delete objs;
 }
@@ -128,7 +125,7 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
         JNIEnv *env, jobject obj, jobject op, jbyteArray senderSecretkeyA, jobjectArray recipients,
         jboolean visibleRecipients) {
 
-    WObjects *objs = NULL;
+    WObjects *objs = nullptr;
     saltpack::BYTE_ARRAY senderSecretkey;
     try {
 
@@ -136,7 +133,7 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
-        if (objs->aout == NULL)
+        if (objs->aout == nullptr)
             objs->mw = new saltpack::MessageWriter(*objs->ow, senderSecretkey, convertRecipients(env, recipients),
                                                    (bool) visibleRecipients);
         else
@@ -177,7 +174,7 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
                                                                                                             jbyteArray senderSecretkeyA,
                                                                                                             jobjectArray recipients) {
 
-    WObjects *objs = NULL;
+    WObjects *objs = nullptr;
     saltpack::BYTE_ARRAY senderSecretkey;
     try {
 
@@ -185,7 +182,7 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
-        if (objs->aout == NULL)
+        if (objs->aout == nullptr)
             objs->mw = new saltpack::MessageWriter(*objs->ow, senderSecretkey, convertRecipients(env, recipients));
         else
             objs->mw = new saltpack::MessageWriter(*objs->aout, senderSecretkey, convertRecipients(env, recipients));
@@ -224,12 +221,12 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
                                                                                                           jobjectArray recipients,
                                                                                                           jboolean visibleRecipients) {
 
-    WObjects *objs = NULL;
+    WObjects *objs = nullptr;
     try {
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
-        if (objs->aout == NULL)
+        if (objs->aout == nullptr)
             objs->mw = new saltpack::MessageWriter(*objs->ow, convertRecipients(env, recipients),
                                                    (bool) visibleRecipients);
         else
@@ -266,12 +263,12 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
                                                                                                          jobject op,
                                                                                                          jobjectArray recipients) {
 
-    WObjects *objs = NULL;
+    WObjects *objs = nullptr;
     try {
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
-        if (objs->aout == NULL)
+        if (objs->aout == nullptr)
             objs->mw = new saltpack::MessageWriter(*objs->ow, convertRecipients(env, recipients));
         else
             objs->mw = new saltpack::MessageWriter(*objs->aout, convertRecipients(env, recipients));
@@ -307,7 +304,7 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
                                                                                                         jbyteArray senderSecretkeyA,
                                                                                                         jboolean detatchedSignature) {
 
-    WObjects *objs = NULL;
+    WObjects *objs = nullptr;
     saltpack::BYTE_ARRAY senderSecretkey;
     try {
 
@@ -317,7 +314,7 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
         objs = populateOutputStreams(env, op,
                                      ds ? saltpack::MODE_DETACHED_SIGNATURE : saltpack::MODE_ATTACHED_SIGNATURE);
 
-        if (objs->aout == NULL)
+        if (objs->aout == nullptr)
             objs->mw = new saltpack::MessageWriter(*objs->ow, senderSecretkey, ds);
         else
             objs->mw = new saltpack::MessageWriter(*objs->aout, senderSecretkey, ds);
@@ -353,7 +350,7 @@ jlong
 Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3B_3_3_3B(
         JNIEnv *env, jobject obj, jobject op, jbyteArray senderSecretkeyA, jobjectArray recipients, jobjectArray keysA) {
 
-    WObjects *objs = NULL;
+    WObjects *objs = nullptr;
     saltpack::BYTE_ARRAY senderSecretkey;
     std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> keys;
     try {
@@ -363,7 +360,7 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
-        if (objs->aout == NULL)
+        if (objs->aout == nullptr)
             objs->mw = new saltpack::MessageWriter(*objs->ow, senderSecretkey, convertRecipients(env, recipients), keys);
         else
             objs->mw = new saltpack::MessageWriter(*objs->aout, senderSecretkey, convertRecipients(env, recipients), keys);
@@ -403,7 +400,7 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
 jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3B_3_3_3B(
         JNIEnv *env, jobject obj, jobject op, jobjectArray recipients, jobjectArray keysA) {
 
-    WObjects *objs = NULL;
+    WObjects *objs = nullptr;
     std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> keys;
     try {
 
@@ -411,7 +408,7 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
 
         objs = populateOutputStreams(env, op, saltpack::MODE_ENCRYPTION);
 
-        if (objs->aout == NULL)
+        if (objs->aout == nullptr)
             objs->mw = new saltpack::MessageWriter(*objs->ow, convertRecipients(env, recipients), keys);
         else
             objs->mw = new saltpack::MessageWriter(*objs->aout, convertRecipients(env, recipients), keys);
@@ -447,7 +444,7 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
 
 void Java_net_nharyes_libsaltpack_MessageWriter_destructor(JNIEnv *env, jobject obj, jlong ptr) {
 
-    WObjects *objs = reinterpret_cast<WObjects *>(ptr);
+    auto objs = reinterpret_cast<WObjects *>(ptr);
 
     deleteWObjects(env, objs);
 }
@@ -457,7 +454,7 @@ void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject ob
 
     try {
 
-        WObjects *objs = reinterpret_cast<WObjects *>(ptr);
+        auto *objs = reinterpret_cast<WObjects *>(ptr);
 
         saltpack::BYTE_ARRAY data = copyBytes(env, dataA);
 
@@ -465,7 +462,7 @@ void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject ob
 
         if (isFinal) {
 
-            if (objs->aout != NULL)
+            if (objs->aout != nullptr)
                 objs->aout->finalise();
 
             objs->ow->finalise();
