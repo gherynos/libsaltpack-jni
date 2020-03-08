@@ -450,13 +450,13 @@ void Java_net_nharyes_libsaltpack_MessageWriter_destructor(JNIEnv *env, jobject 
 }
 
 void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject obj, jlong ptr, jbyteArray dataA,
-                                                         jboolean isFinal) {
+        jint off, jint len, jboolean isFinal) {
 
     try {
 
         auto *objs = reinterpret_cast<WObjects *>(ptr);
 
-        saltpack::BYTE_ARRAY data = copyBytes(env, dataA);
+        saltpack::BYTE_ARRAY data = copyBytes(env, dataA, off, len);
 
         objs->mw->addBlock(data, isFinal);
 

@@ -189,7 +189,7 @@ public class EncryptionTest {
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
 
         mw.addBlock("Sample".getBytes("UTF-8"), false);
-        mw.addBlock(" message".getBytes("UTF-8"), false);
+        mw.addBlock(" message!!!".getBytes("UTF-8"), 0, 8, false);
         mw.addBlock(".".getBytes("UTF-8"), true);
 
         mw.destroy();
@@ -342,7 +342,7 @@ public class EncryptionTest {
 
         mw.addBlock("Sample".getBytes("UTF-8"), false);
         mw.addBlock(" message".getBytes("UTF-8"), false);
-        mw.addBlock(" 2.".getBytes("UTF-8"), true);
+        mw.addBlock("KK 2.".getBytes("UTF-8"), 2, 3, true);
 
         mw.destroy();
 
@@ -456,7 +456,8 @@ public class EncryptionTest {
 
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey, rPublickey}, false);
 
-        mw.addBlock(buf1, false);
+        mw.addBlock(buf1, 0, 512, false);
+        mw.addBlock(buf1, 512, 512, false);
         mw.addBlock(buf2, true);
 
         mw.destroy();
@@ -506,7 +507,7 @@ public class EncryptionTest {
         MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
 
         mw.addBlock("Sample".getBytes("UTF-8"), false);
-        mw.addBlock(" message".getBytes("UTF-8"), false);
+        mw.addBlock("SSSS message!!!".getBytes("UTF-8"), 4, 8, false);
         mw.addBlock(".".getBytes("UTF-8"), true);
 
         mw.destroy();

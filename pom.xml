@@ -6,7 +6,7 @@
 
     <groupId>net.nharyes</groupId>
     <artifactId>libsaltpack-jni</artifactId>
-    <version>0.2.2</version>
+    <version>0.3.0</version>
 
     <name>libsaltpack-jni</name>
     <url>https://github.com/Gherynos/libsaltpack-jni</url>

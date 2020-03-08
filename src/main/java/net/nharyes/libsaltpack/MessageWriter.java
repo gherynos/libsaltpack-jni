@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -157,7 +157,21 @@ public class MessageWriter {
      */
     public void addBlock(byte[] data, boolean isFinal) throws SaltpackException {
 
-        addBlock(ptr, data, isFinal);
+        addBlock(ptr, data, 0, data.length, isFinal);
+    }
+
+    /**
+     * Adds a block to the current message.
+     *
+     * @param data    the data for the block, maximum 1MB.
+     * @param off     the start offset in the data.
+     * @param len     the number of bytes to write.
+     * @param isFinal the flag defining the last packet of the message.
+     * @throws SaltpackException
+     */
+    public void addBlock(byte[] data, int off, int len, boolean isFinal) throws SaltpackException {
+
+        addBlock(ptr, data, off, len, isFinal);
     }
 
     private native long constructor(OutputParameters op, byte[] senderSecretkey, byte[][] recipients, boolean visibleRecipients) throws SaltpackException;
@@ -176,5 +190,5 @@ public class MessageWriter {
 
     private native void destructor(long ptr);
 
-    private native void addBlock(long ptr, byte[] data, boolean isFinal) throws SaltpackException;
+    private native void addBlock(long ptr, byte[] data, int off, int len, boolean isFinal) throws SaltpackException;
 }

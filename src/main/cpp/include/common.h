@@ -58,6 +58,18 @@ inline saltpack::BYTE_ARRAY copyBytes(JNIEnv *env, jbyteArray array) {
     return out;
 }
 
+inline saltpack::BYTE_ARRAY copyBytes(JNIEnv *env, jbyteArray array, jint off, jint len) {
+
+    auto size = (size_t) len;
+    saltpack::BYTE_ARRAY out(size);
+
+    env->GetByteArrayRegion(array, (jsize) off, (jsize) size, reinterpret_cast<jbyte *>(out.data()));
+    if (env->ExceptionCheck())
+        throw saltpack::SaltpackException("errors while reading byte array");
+
+    return out;
+}
+
 inline jbyteArray copyBytes(JNIEnv *env, saltpack::BYTE_ARRAY array) {
 
     jbyteArray out = env->NewByteArray((jsize) array.size());

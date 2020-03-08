@@ -74,10 +74,10 @@ JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_destructor
 /*
  * Class:     net_nharyes_libsaltpack_MessageWriter
  * Method:    addBlock
- * Signature: (J[BZ)V
+ * Signature: (J[BIIZ)V
  */
 JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageWriter_addBlock
-  (JNIEnv *, jobject, jlong, jbyteArray, jboolean);
+  (JNIEnv *, jobject, jlong, jbyteArray, jint, jint, jboolean);
 
 #ifdef __cplusplus
 }
