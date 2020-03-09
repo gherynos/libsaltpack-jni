@@ -111,8 +111,7 @@ then
     git clone https://github.com/Gherynos/libsaltpack.git
     if [ ! -e "$PT/libsaltpack-$LIBSALTPACK_VER.tar.gz" ]
     then
-#        wget -O $PT/libsaltpack-$LIBSALTPACK_VER.tar.gz https://github.com/gherynos/libsaltpack/archive/v$LIBSALTPACK_VER.tar.gz
-        wget -O $PT/libsaltpack-$LIBSALTPACK_VER.tar.gz https://github.com/gherynos/libsaltpack/archive/$LIBSALTPACK_VER.tar.gz
+        wget -O $PT/libsaltpack-$LIBSALTPACK_VER.tar.gz https://github.com/gherynos/libsaltpack/archive/v$LIBSALTPACK_VER.tar.gz
     fi
     tar -xvzf libsaltpack-$LIBSALTPACK_VER.tar.gz
     cd libsaltpack-$LIBSALTPACK_VER || exit
