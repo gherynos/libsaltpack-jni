@@ -23,15 +23,7 @@ public class MessageWriter {
 
     static {
 
-        try {
-
-            System.loadLibrary("saltpack-jni");
-
-        } catch (UnsatisfiedLinkError e) {
-
-            System.err.println("Native code library failed to load.\n" + e);
-            System.exit(1);
-        }
+        Loader.loadLibrary();
     }
 
     private long ptr = -1;
