@@ -11,8 +11,8 @@ LIBSALTPACK_VER=0.2.4
 PT=/opt/libsaltpack-jni/android/tmp
 cd $PT || exit
 
-apt-get update
-apt-get install -y git zip unzip wget build-essential autoconf libtool python
+apt update
+apt install -y git zip unzip wget build-essential autoconf libtool python openjdk-8-jdk maven
 
 # Android NDK
 echo "Android NDK"
@@ -127,13 +127,13 @@ export LIBSALTPACK_PATH=$PT/libsaltpack-$LIBSALTPACK_VER
 echo "LibSaltpack-jni"
 cd /opt/libsaltpack-jni/android || exit
 printf "\nAPP_PLATFORM := %s\n" $NDK_PLATFORM  >> ./jni/Application.mk
-if [ -e "libsaltpack-jni-libs.jar" ]
+if [ -e "../src/main/resources/lib" ]
 then
-    rm -Rf ./lib
-    rm -Rf ./libs
-    rm ./libsaltpack-jni-libs.jar
+    rm -Rf ../src/main/resources/lib
 fi
 $ANDROID_NDK_HOME/ndk-build
-mv ./libs ./lib
-zip -r libsaltpack-jni-libs.jar ./lib -x "*.DS_Store"
+mv ./libs ../src/main/resources/lib
+cd /opt/libsaltpack-jni || exit
+mvn clean
+mvn package -DskipTests
 cd $PT || exit

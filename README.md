@@ -33,7 +33,7 @@ Here's how to build libsaltpack-jni and all its dependencies for Android using D
 docker run --rm -v `pwd`:/opt/libsaltpack-jni -t ubuntu:xenial /bin/bash /opt/libsaltpack-jni/android/compile.sh
 ```
 
-This will produce the `libsaltpack-jni-libs.jar` file under the `android` directory; add that file together with the JAR created by the previous step to the Android Studio project.
+This will produce the `libsaltpack-jni-<version>.jar` file under the `target` directory, containing the Java classes and the binary libraries.
 
 Documentation
 -------------
