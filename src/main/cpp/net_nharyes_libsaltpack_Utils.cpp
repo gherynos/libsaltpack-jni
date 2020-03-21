@@ -349,7 +349,7 @@ Java_net_nharyes_libsaltpack_Utils_deriveKeyFromPassword(JNIEnv *env, jclass cls
             throw saltpack::SaltpackException("Unable to initialise libsodium.");
 
         size_t size = GET_BYTES_SIZE(passwordA);
-        jchar buf[size];
+        jchar* buf = new jchar[size];
         env->GetCharArrayRegion(passwordA, 0, (jsize) size, buf);
         if (env->ExceptionCheck())
             throw saltpack::SaltpackException("errors while reading char array");

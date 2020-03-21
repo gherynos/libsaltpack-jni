@@ -50,7 +50,7 @@ public class Loader {
         }
 
         return new String[] {
-                String.format("lib%1$s%2$s%1$s%3$s%1$s%4$s.%5$s", File.separator, os, arch, LIB_FILENAME, ext),
+                String.format("/lib/%s/%s/%s.%s", os, arch, LIB_FILENAME, ext),
                 ext
         };
     }
@@ -60,7 +60,7 @@ public class Loader {
         String[] pathExt = getPathExt();
 
         // local execution (not in Jar)
-        URL path = Loader.class.getResource(File.separator + pathExt[0]);
+        URL path = Loader.class.getResource(pathExt[0]);
         if (path.getProtocol().equals("file"))
             return path.toString().replace("file:", "");
 
@@ -71,7 +71,7 @@ public class Loader {
         File lib = new File(String.format("%s%s%s.%s", tempDir, File.separator, LIB_FILENAME, pathExt[1]));
         if (!lib.exists()) {
 
-            InputStream in = Loader.class.getResourceAsStream(File.separator + pathExt[0]);
+            InputStream in = Loader.class.getResourceAsStream(pathExt[0]);
             if (in == null)
                 throw new IOException("Library not found in JAR file.");
 
