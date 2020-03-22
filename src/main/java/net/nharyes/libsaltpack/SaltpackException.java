@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ package net.nharyes.libsaltpack;
  *  Saltpack exception.
  */
 public class SaltpackException extends Exception {
+
+    private static final long serialVersionUID = 14357519183772032L;
 
     public SaltpackException(String msg) {
 

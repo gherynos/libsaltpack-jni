@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ public class MessageReader {
         Loader.loadLibrary();
     }
 
-    private long ptr = -1;
+    private long ptr = -1;  // NOPMD
 
     /**
      * Creates a new MessageReader instance to decrypt a message.

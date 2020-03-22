@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016-2020 Luca Zanconato
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package net.nharyes.libsaltpack;
 
 import java.io.File;
@@ -7,19 +23,25 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Locale;
 
-public class Loader {
+public final class Loader {
 
     private static final String LIB_FILENAME = "libsaltpack-jni";
 
     private static Path tempDir;
 
-    private static boolean libraryLoaded = false;
+    private static boolean libraryLoaded;
+
+    private Loader() {
+    }
 
     public static void loadLibrary() {
 
-        if (libraryLoaded)
+        if (libraryLoaded) {
+
             return;
+        }
 
         try {
 
@@ -35,18 +57,18 @@ public class Loader {
 
             } catch (IOException ex) {
 
-                System.err.println("Native code library failed to load.\n" + ex);
-                System.exit(1);
+                System.err.println("Native code library failed to load.\n" + ex);  // NOPMD
+                System.exit(1);  // NOPMD
             }
         }
     }
 
     private static String[] getPathExt() {
 
-        String os = System.getProperty("os.name").toLowerCase().replaceAll(" ", "_");
-        String arch = System.getProperty("os.arch").toLowerCase().replaceAll(" ", "_");
+        String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH).replaceAll(" ", "_");
+        String arch = System.getProperty("os.arch").toLowerCase(Locale.ENGLISH).replaceAll(" ", "_");
 
-        String ext = "so";
+        String ext;
         if (os.contains("mac")) {
 
             ext = "dylib";
@@ -54,6 +76,10 @@ public class Loader {
         } else if (os.contains("win")) {
 
             ext = "dll";
+
+        } else {
+
+            ext = "so";
         }
 
         return new String[] {
@@ -68,11 +94,18 @@ public class Loader {
 
         // local execution (not in Jar)
         URL path = Loader.class.getResource(pathExt[0]);
-        if (path.getProtocol().equals("file"))
-            return path.toString().replace("file:", "");
+        if (path.getProtocol().equals("file")) {
 
-        if (tempDir == null)
-            tempDir = Files.createTempDirectory(LIB_FILENAME);
+            return path.toString().replace("file:", "");  // NOPMD
+        }
+
+        synchronized (LIB_FILENAME) {
+
+            if (tempDir == null) {
+
+                tempDir = Files.createTempDirectory(LIB_FILENAME);
+            }
+        }
 
         // create temporary library file to load
         File lib = new File(String.format("%s%s%s.%s", tempDir, File.separator, LIB_FILENAME, pathExt[1]));
@@ -80,8 +113,10 @@ public class Loader {
 
             try (InputStream in = Loader.class.getResourceAsStream(pathExt[0])) {
 
-                if (in == null)
+                if (in == null) {
+
                     throw new IOException("Library not found in JAR file.");
+                }
 
                 Files.copy(in, lib.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 lib.deleteOnExit();
@@ -91,7 +126,7 @@ public class Loader {
         return lib.getAbsolutePath();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
 
         String[] pathExt = getPathExt();
         String path = String.format("src%1$smain%1$sresources%1$s%2$s", File.separator, pathExt[0]);
@@ -100,8 +135,10 @@ public class Loader {
         dest.mkdirs();
 
         String sourceFile = LIB_FILENAME + "." + pathExt[1];
-        if (sourceFile.endsWith(".dll"))
+        if (sourceFile.endsWith(".dll")) {
+
             sourceFile = "Release" + File.separator + sourceFile.replace("lib", "");
+        }
 
         Files.copy(new File(sourceFile).toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }

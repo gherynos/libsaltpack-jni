@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,7 @@ package net.nharyes.libsaltpack;
 /**
  * Constants for key sizes and alphabets.
  */
-public class Constants {
-
-    private Constants() {
-    }
+public class Constants {  // NOPMD
 
     /**
      * Constant defining the size of a public key used when encrypting/decrypting a message with {@link net.nharyes.libsaltpack.MessageWriter} and {@link net.nharyes.libsaltpack.MessageReader}.
@@ -83,7 +80,7 @@ public class Constants {
      * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      * </p>
      */
-    public static final int CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE = 33554432;
+    public static final int CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE = 33_554_432;
 
     /**
      * Constant defining the maximum amount of computations.
@@ -99,7 +96,7 @@ public class Constants {
      * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      * </p>
      */
-    public static final int CRYPTO_PWHASH_MEMLIMIT_MODERATE = 134217728;
+    public static final int CRYPTO_PWHASH_MEMLIMIT_MODERATE = 134_217_728;
 
     /**
      * Constant defining the maximum amount of computations.
@@ -115,5 +112,8 @@ public class Constants {
      * Useful for {@link net.nharyes.libsaltpack.Utils#deriveKeyFromPassword(long keySize, char[] password, byte[] salt, long opsLimit, long memLimit)}.
      * </p>
      */
-    public static final int CRYPTO_PWHASH_MEMLIMIT_SENSITIVE = 536870912;
+    public static final int CRYPTO_PWHASH_MEMLIMIT_SENSITIVE = 536_870_912;
+
+    private Constants() {
+    }
 }

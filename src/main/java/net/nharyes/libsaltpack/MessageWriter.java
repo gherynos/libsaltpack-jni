@@ -19,14 +19,14 @@ package net.nharyes.libsaltpack;
 /**
  * The class used to encrypt or sign a message.
  */
-public class MessageWriter {
+public class MessageWriter {  // NOPMD
 
     static {
 
         Loader.loadLibrary();
     }
 
-    private long ptr = -1;
+    private long ptr = -1;  // NOPMD
 
     /**
      * Creates a new MessageWriter instance to encrypt a message.

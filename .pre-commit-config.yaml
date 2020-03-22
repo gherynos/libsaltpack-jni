@@ -12,6 +12,7 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
+      - id: check-xml
       - id: check-added-large-files
       - id: pretty-format-json
         args:
@@ -37,3 +38,9 @@ repos:
     rev: v1.20.0
     hooks:
       - id: yamllint
+  - repo: https://github.com/gherynos/pre-commit-java
+    rev: v0.1.0
+    hooks:
+      - id: pmd
+        exclude: /test/
+        args: ["-R", "ruleset.xml", "-cache", "pmd.cache"]

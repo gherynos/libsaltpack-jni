@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 Luca Zanconato
+ * Copyright 2016-2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@ import java.io.InputStream;
  * The alphabet used is BASE62.
  * </p>
  */
-public class InputParameters {
+public class InputParameters {  // NOPMD
 
-    private InputStream inputStream;
+    private final InputStream inputStream;
 
-    private boolean armored = false;
+    private boolean armored;
 
     private String app;
 
