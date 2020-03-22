@@ -1,19 +1,17 @@
-libsaltpack-jni
-===============
+# libsaltpack-jni
+
 A Java Native Interface wrapper for [libsaltpack](https://github.com/Gherynos/libsaltpack).
 
-Dependencies
-------------
+## Dependencies
 
 * [libsaltpack](https://github.com/Gherynos/libsaltpack)
 * [libsodium](https://download.libsodium.org/doc/) >= 1.0.9
 * [msgpack](https://github.com/msgpack/msgpack-c) >= 2.0.0
 * [GMP](https://gmplib.org/) >= 6.0.0 (or [MPIR](http://mpir.org/) >= 2.6.0 on Windows)
 
-`libsodium` and `GMP` should be compiled with PIC enabled (```./configure --with-pic```). 
+`libsodium` and `GMP` should be compiled with PIC enabled (```./configure --with-pic```).
 
-Building
---------
+## Building
 
 Here's how to build the JAR package and the dynamic library on Linux or OSX:
 
@@ -35,13 +33,11 @@ docker run --rm -v `pwd`:/opt/libsaltpack-jni -t ubuntu:xenial /bin/bash /opt/li
 
 This will produce the `libsaltpack-jni-<version>.jar` file under the `target` directory, containing the Java classes and the binary libraries.
 
-Documentation
--------------
+## Documentation
 
 The Javadoc can be found here: [https://gherynos.github.io/libsaltpack-jni](https://gherynos.github.io/libsaltpack-jni).
 
-Examples
---------
+## Examples
 
 ### Encrypt/decrypt message
 
@@ -100,6 +96,7 @@ class Test {
     }
 }
 ```
+
 ### Sign/verify message
 
 #### Attached signature
@@ -337,8 +334,7 @@ class Test {
 }
 ```
 
-Copyright and license
----------------------
+## Copyright and license
 
 Copyright 2016-2020 Luca Zanconato (<luca.zanconato@naes.co>)
 
@@ -346,7 +342,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this work except in compliance with the License.
 You may obtain a copy of the License in the LICENSE file, or at:
 
-   http://www.apache.org/licenses/LICENSE-2.0
+   <http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
