@@ -14,17 +14,24 @@ public class Loader {
 
     private static Path tempDir;
 
+    private static boolean libraryLoaded = false;
+
     public static void loadLibrary() {
+
+        if (libraryLoaded)
+            return;
 
         try {
 
             System.loadLibrary("saltpack-jni");
+            libraryLoaded = true;
 
         } catch (UnsatisfiedLinkError e) {
 
             try {
 
                 System.load(getLib());
+                libraryLoaded = true;
 
             } catch (IOException ex) {
 
@@ -71,12 +78,14 @@ public class Loader {
         File lib = new File(String.format("%s%s%s.%s", tempDir, File.separator, LIB_FILENAME, pathExt[1]));
         if (!lib.exists()) {
 
-            InputStream in = Loader.class.getResourceAsStream(pathExt[0]);
-            if (in == null)
-                throw new IOException("Library not found in JAR file.");
+            try (InputStream in = Loader.class.getResourceAsStream(pathExt[0])) {
 
-            Files.copy(in, lib.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            lib.deleteOnExit();
+                if (in == null)
+                    throw new IOException("Library not found in JAR file.");
+
+                Files.copy(in, lib.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                lib.deleteOnExit();
+            }
         }
 
         return lib.getAbsolutePath();
@@ -90,7 +99,10 @@ public class Loader {
         File dest = new File(path);
         dest.mkdirs();
 
-        Files.copy(new File(LIB_FILENAME + "." + pathExt[1]).toPath(),
-                dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        String sourceFile = LIB_FILENAME + "." + pathExt[1];
+        if (sourceFile.endsWith(".dll"))
+            sourceFile = "Release" + File.separator + sourceFile.replace("lib", "");
+
+        Files.copy(new File(sourceFile).toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 }
