@@ -61,7 +61,10 @@ script:
   - cmake -DJAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 .
   - make
   - mvn exec:java -Dexec.mainClass="net.nharyes.libsaltpack.Loader"
-  - rm libsaltpack-jni.so
+
+  - if [ $TRAVIS_OS_NAME = linux ]; then rm libsaltpack-jni.so; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then rm libsaltpack-jni.dylib; fi
+
   - mvn test
 
 after_success:
