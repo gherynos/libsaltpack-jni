@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 Luca Zanconato
+ * Copyright 2020 Luca Zanconato
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package net.nharyes.libsaltpack;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -91,13 +90,6 @@ public final class Loader {
     private static String getLib() throws IOException {
 
         String[] pathExt = getPathExt();
-
-        // local execution (not in Jar)
-        URL path = Loader.class.getResource(pathExt[0]);
-        if (path.getProtocol().equals("file")) {
-
-            return path.toString().replace("file:", "");  // NOPMD
-        }
 
         synchronized (LIB_FILENAME) {
 

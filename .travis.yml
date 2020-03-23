@@ -1,0 +1,68 @@
+---
+# yamllint disable rule:line-length
+language: cpp
+
+branches:
+  only:
+    - master
+
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+            - openjdk-8-jdk
+            - maven
+            - xz-utils
+            - m4
+      env:
+        - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+
+    - os: osx
+      osx_image: xcode10.1
+      compiler: clang
+
+before_install:
+  - if [ $TRAVIS_OS_NAME = linux ]; then eval "${MATRIX_EVAL}"; fi
+
+addons:
+  homebrew:
+    packages:
+      - libsodium
+      - msgpack
+      - gmp
+    update: true
+
+install:
+  - if [ $TRAVIS_OS_NAME = linux ]; then wget https://github.com/msgpack/msgpack-c/releases/download/cpp-2.0.0/msgpack-2.0.0.tar.gz; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then tar -xvzf msgpack-2.0.0.tar.gz; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then pushd msgpack-2.0.0 && cmake . && make && sudo make install && popd; fi
+
+  - if [ $TRAVIS_OS_NAME = linux ]; then wget https://github.com/jedisct1/libsodium/releases/download/1.0.9/libsodium-1.0.9.tar.gz; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then tar -xvzf libsodium-1.0.9.tar.gz; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then pushd libsodium-1.0.9 && ./configure --with-pic && make && sudo make install && popd; fi
+
+  - if [ $TRAVIS_OS_NAME = linux ]; then wget https://gmplib.org/download/gmp/gmp-6.0.0.tar.xz; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then tar -xvJf gmp-6.0.0.tar.xz; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then pushd gmp-6.0.0 && ./configure --enable-cxx --with-pic && make && sudo make install && popd; fi
+
+script:
+  - wget https://github.com/gherynos/libsaltpack/archive/v0.2.4.tar.gz
+  - tar -xvzf v0.2.4.tar.gz
+  - pushd libsaltpack-0.2.4 && cmake . && make && make test && sudo make install && popd
+
+  - mvn compile
+  - cmake -DJAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 .
+  - make
+  - mvn exec:java -Dexec.mainClass="net.nharyes.libsaltpack.Loader"
+  - rm libsaltpack-jni.so
+  - mvn test
+
+after_success:
+  - mvn jacoco:report coveralls:report
