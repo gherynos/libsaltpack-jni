@@ -24,7 +24,7 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class SignatureTest {
+public class C_SignatureTest {
 
     @Test
     public void binaryAttached() throws Exception {

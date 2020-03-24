@@ -24,7 +24,7 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class SigncryptionTest {
+public class C_SigncryptionTest {
 
     @Test
     public void binary1() throws Exception {
