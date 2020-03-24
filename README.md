@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/gherynos/libsaltpack-jni.svg?branch=master)](https://travis-ci.org/gherynos/libsaltpack-jni)
 [![Coverage Status](https://coveralls.io/repos/github/gherynos/libsaltpack-jni/badge.svg?branch=master)](https://coveralls.io/github/gherynos/libsaltpack-jni?branch=master)
-[![Latest Release](https://img.shields.io/github/release/gherynos/libsaltpack-jni.svg)](https://github.com/gherynos/libsaltpack-jni/releases/latest)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
 A Java Native Interface wrapper for [libsaltpack](https://github.com/Gherynos/libsaltpack).
@@ -24,6 +23,7 @@ Here's how to build the JAR package and the dynamic library on Linux or OSX:
 mvn compile
 cmake .
 make
+mvn exec:java -Dexec.mainClass="net.nharyes.libsaltpack.Loader"
 mvn package
 ```
 

@@ -26,7 +26,7 @@ import java.util.Locale;
 
 public final class Loader {
 
-    public static final String LIB_FILENAME = "libsaltpack-jni";
+    private static final String LIB_FILENAME = "libsaltpack-jni";
 
     private static Path tempDir;
 
@@ -62,7 +62,7 @@ public final class Loader {
         }
     }
 
-    protected static String[] getPathExt() {  // NOPMD
+    private static String[] getPathExt() {
 
         String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH).replaceAll(" ", "_");
         String arch = System.getProperty("os.arch").toLowerCase(Locale.ENGLISH).replaceAll(" ", "_");
@@ -116,11 +116,6 @@ public final class Loader {
         }
 
         return lib.getAbsolutePath();
-    }
-
-    protected static Path getTempDir() {  // NOPMD
-
-        return tempDir;
     }
 
     public static void main(String[] args) throws IOException {

@@ -65,8 +65,6 @@
                 <version>2.19.1</version>
                 <configuration>
                     <argLine>-Xmx1024m ${argLine}</argLine>
-                    <runOrder>alphabetical</runOrder>
-                    <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>
             <plugin>

@@ -26,7 +26,7 @@ import java.util.Random;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class C_UtilsTest {
+public class UtilsTest {
 
     @Test
     public void baseX() throws Exception {
