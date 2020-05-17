@@ -33,22 +33,11 @@ LOCAL_SRC_FILES := ${LIBSODIUM_PATH}/libsodium-android-$(ARCH_FOLDER)/lib/libsod
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := gmp
-LOCAL_SRC_FILES := ${LIBGMP_PATH}/libgmp-android-$(ARCH_FOLDER)/lib/libgmp.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := gmpp
-LOCAL_SRC_FILES := ${LIBGMP_PATH}/libgmp-android-$(ARCH_FOLDER)/lib/libgmpxx.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
 
 LOCAL_MODULE := saltpack-jni
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src/main/cpp/include
 LOCAL_C_INCLUDES += ${LIBSODIUM_PATH}/libsodium-android-$(ARCH_FOLDER)/include
-LOCAL_C_INCLUDES += ${LIBGMP_PATH}/libgmp-android-$(ARCH_FOLDER)/include
 LOCAL_C_INCLUDES += ${MSGPACK_PATH}/include
 LOCAL_C_INCLUDES += ${LIBSALTPACK_PATH}/include
 
@@ -60,7 +49,5 @@ LOCAL_SRC_FILES += ../../src/main/cpp/OutputStreamWrapper.cpp
 
 LOCAL_STATIC_LIBRARIES += saltpack
 LOCAL_STATIC_LIBRARIES += sodium
-LOCAL_STATIC_LIBRARIES += gmp
-LOCAL_STATIC_LIBRARIES += gmpp
 
 include $(BUILD_SHARED_LIBRARY)

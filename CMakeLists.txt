@@ -39,10 +39,5 @@ include_directories(${LIBSODIUM_INCLUDE_DIRS})
 target_link_libraries(saltpack-jni ${LIBSODIUM_LIBRARIES})
 
 # MessagePack
-find_package(MsgPack REQUIRED)
+find_package(Msgpack REQUIRED)
 include_directories(${MSGPACK_INCLUDE_DIRS})
-
-# GMP
-find_package(GMP REQUIRED)
-include_directories(${GMP_INCLUDE_DIRS})
-target_link_libraries(saltpack-jni ${GMP_LIBRARIES})

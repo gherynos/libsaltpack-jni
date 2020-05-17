@@ -35,7 +35,6 @@ addons:
     packages:
       - libsodium
       - msgpack
-      - gmp
     update: true
 
 install:
@@ -47,14 +46,10 @@ install:
   - if [ $TRAVIS_OS_NAME = linux ]; then tar -xvzf libsodium-1.0.9.tar.gz; fi
   - if [ $TRAVIS_OS_NAME = linux ]; then pushd libsodium-1.0.9 && ./configure --with-pic && make && sudo make install && popd; fi
 
-  - if [ $TRAVIS_OS_NAME = linux ]; then wget https://gmplib.org/download/gmp/gmp-6.0.0.tar.xz; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then tar -xvJf gmp-6.0.0.tar.xz; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then pushd gmp-6.0.0 && ./configure --enable-cxx --with-pic && make && sudo make install && popd; fi
-
 script:
-  - wget https://github.com/gherynos/libsaltpack/archive/v0.2.4.tar.gz
-  - tar -xvzf v0.2.4.tar.gz
-  - pushd libsaltpack-0.2.4 && cmake . && make && make test && sudo make install && popd
+  - git clone https://github.com/gherynos/libsaltpack.git
+  - pushd libsaltpack && git checkout v0.4.0 && git submodule init && git submodule update
+  - cmake . && make && make test && sudo make install && popd
 
   - mvn compile
   - cmake -DJAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 .
