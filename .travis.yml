@@ -47,9 +47,9 @@ install:
   - if [ $TRAVIS_OS_NAME = linux ]; then pushd libsodium-1.0.9 && ./configure --with-pic && make && sudo make install && popd; fi
 
 script:
-  - wget https://github.com/gherynos/libsaltpack/archive/v0.3.0.tar.gz
-  - tar -xvzf v0.3.0.tar.gz
-  - pushd libsaltpack-0.3.0 && git clone https://github.com/983/Num.git ext/Num
+  - wget https://github.com/gherynos/libsaltpack/archive/v0.3.1.tar.gz
+  - tar -xvzf v0.3.1.tar.gz
+  - pushd libsaltpack-0.3.1 && git clone https://github.com/983/Num.git ext/Num
   - cmake . && make && make test && sudo make install && popd
 
   - mvn compile
