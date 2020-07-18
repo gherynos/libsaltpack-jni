@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 NDK_VER=r20b
 NDK_PLATFORM_NUM=21
@@ -10,8 +11,8 @@ LIBSALTPACK_VER=v0.3.1
 PT=/opt/libsaltpack-jni/android/tmp
 cd $PT || exit
 
-apt update
-apt install -y git zip unzip wget build-essential autoconf libtool python openjdk-8-jdk maven
+apt-get update
+apt-get install -y git zip unzip wget build-essential autoconf libtool python openjdk-8-jdk maven
 
 # Android NDK
 echo "Android NDK"
