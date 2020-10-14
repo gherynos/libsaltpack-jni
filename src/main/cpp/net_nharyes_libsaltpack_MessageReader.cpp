@@ -137,7 +137,7 @@ jobject Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_lib
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -175,7 +175,7 @@ jobject Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_lib
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -216,7 +216,7 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -267,13 +267,13 @@ Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return NULL;
+        return nullptr;
     }
 }
 
 void Java_net_nharyes_libsaltpack_MessageReader_destructor(JNIEnv *env, jobject obj, jobject ptr) {
 
-    RObjects *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
+    auto *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
 
     deleteRObjects(env, objs);
 }
@@ -282,7 +282,7 @@ jboolean Java_net_nharyes_libsaltpack_MessageReader_hasMoreBlocks(JNIEnv *env, j
 
     try {
 
-        RObjects *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
+        auto *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
 
         return (jboolean) objs->mr->hasMoreBlocks();
 
@@ -310,7 +310,7 @@ jbyteArray Java_net_nharyes_libsaltpack_MessageReader_getBlock(JNIEnv *env, jobj
 
     try {
 
-        RObjects *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
+        auto *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
         saltpack::BYTE_ARRAY data = objs->mr->getBlock();
 
         return copyBytes(env, data);
@@ -339,7 +339,7 @@ jobjectArray Java_net_nharyes_libsaltpack_MessageReader_getRecipients(JNIEnv *en
 
     try {
 
-        RObjects *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
+        auto *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
         std::list<saltpack::BYTE_ARRAY> recipients = objs->mr->getRecipients();
 
         jobjectArray out = env->NewObjectArray((jsize) recipients.size(), BYTE_ARRAY_CLASS(env), env->NewByteArray(1));
@@ -393,7 +393,7 @@ jbyteArray Java_net_nharyes_libsaltpack_MessageReader_getSender(JNIEnv *env, job
 
     try {
 
-        RObjects *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
+        auto *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
         saltpack::BYTE_ARRAY sender = objs->mr->getSender();
 
         return copyBytes(env, sender);
@@ -422,7 +422,7 @@ jboolean Java_net_nharyes_libsaltpack_MessageReader_isIntentionallyAnonymous(JNI
 
     try {
 
-        RObjects *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
+        auto *objs = (RObjects *) env->GetDirectBufferAddress(ptr);
 
         return (jboolean) objs->mr->isIntentionallyAnonymous();
 
