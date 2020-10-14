@@ -10,82 +10,82 @@ extern "C" {
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    constructor
- * Signature: (Lnet/nharyes/libsaltpack/InputParameters;[B)J
+ * Signature: (Lnet/nharyes/libsaltpack/InputParameters;[B)Ljava/nio/ByteBuffer;
  */
-JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2_3B
+JNIEXPORT jobject JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2_3B
   (JNIEnv *, jobject, jobject, jbyteArray);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    constructor
- * Signature: (Lnet/nharyes/libsaltpack/InputParameters;)J
+ * Signature: (Lnet/nharyes/libsaltpack/InputParameters;)Ljava/nio/ByteBuffer;
  */
-JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2
+JNIEXPORT jobject JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2
   (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    constructor
- * Signature: (Lnet/nharyes/libsaltpack/InputParameters;Ljava/io/InputStream;)J
+ * Signature: (Lnet/nharyes/libsaltpack/InputParameters;Ljava/io/InputStream;)Ljava/nio/ByteBuffer;
  */
-JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2Ljava_io_InputStream_2
+JNIEXPORT jobject JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2Ljava_io_InputStream_2
   (JNIEnv *, jobject, jobject, jobject);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    constructor
- * Signature: (Lnet/nharyes/libsaltpack/InputParameters;[B[[B)J
+ * Signature: (Lnet/nharyes/libsaltpack/InputParameters;[B[[B)Ljava/nio/ByteBuffer;
  */
-JNIEXPORT jlong JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2_3B_3_3B
+JNIEXPORT jobject JNICALL Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2_3B_3_3B
   (JNIEnv *, jobject, jobject, jbyteArray, jobjectArray);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    destructor
- * Signature: (J)V
+ * Signature: (Ljava/nio/ByteBuffer;)V
  */
 JNIEXPORT void JNICALL Java_net_nharyes_libsaltpack_MessageReader_destructor
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    hasMoreBlocks
- * Signature: (J)Z
+ * Signature: (Ljava/nio/ByteBuffer;)Z
  */
 JNIEXPORT jboolean JNICALL Java_net_nharyes_libsaltpack_MessageReader_hasMoreBlocks
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    getBlock
- * Signature: (J)[B
+ * Signature: (Ljava/nio/ByteBuffer;)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_MessageReader_getBlock
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    getRecipients
- * Signature: (J)[[B
+ * Signature: (Ljava/nio/ByteBuffer;)[[B
  */
 JNIEXPORT jobjectArray JNICALL Java_net_nharyes_libsaltpack_MessageReader_getRecipients
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    getSender
- * Signature: (J)[B
+ * Signature: (Ljava/nio/ByteBuffer;)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_net_nharyes_libsaltpack_MessageReader_getSender
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     net_nharyes_libsaltpack_MessageReader
  * Method:    isIntentionallyAnonymous
- * Signature: (J)Z
+ * Signature: (Ljava/nio/ByteBuffer;)Z
  */
 JNIEXPORT jboolean JNICALL Java_net_nharyes_libsaltpack_MessageReader_isIntentionallyAnonymous
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jobject);
 
 #ifdef __cplusplus
 }

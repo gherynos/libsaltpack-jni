@@ -121,7 +121,7 @@ void deleteWObjects(JNIEnv *env, WObjects *objs) {
     delete objs;
 }
 
-jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3BZ(
+jobject Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3BZ(
         JNIEnv *env, jobject obj, jobject op, jbyteArray senderSecretkeyA, jobjectArray recipients,
         jboolean visibleRecipients) {
 
@@ -161,13 +161,13 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return -1;
+        return NULL;
     }
 
-    return (long) objs;
+    return env->NewDirectByteBuffer((void*) objs, sizeof(WObjects));
 }
 
-jlong
+jobject
 Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3B(JNIEnv *env,
                                                                                                             jobject obj,
                                                                                                             jobject op,
@@ -208,13 +208,13 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return -1;
+        return NULL;
     }
 
-    return (long) objs;
+    return env->NewDirectByteBuffer((void*) objs, sizeof(WObjects));
 }
 
-jlong
+jobject
 Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3BZ(JNIEnv *env,
                                                                                                           jobject obj,
                                                                                                           jobject op,
@@ -251,13 +251,13 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return -1;
+        return NULL;
     }
 
-    return (long) objs;
+    return env->NewDirectByteBuffer((void*) objs, sizeof(WObjects));
 }
 
-jlong
+jobject
 Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3B(JNIEnv *env,
                                                                                                          jobject obj,
                                                                                                          jobject op,
@@ -291,13 +291,13 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return -1;
+        return NULL;
     }
 
-    return (long) objs;
+    return env->NewDirectByteBuffer((void*) objs, sizeof(WObjects));
 }
 
-jlong
+jobject
 Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3BZ(JNIEnv *env,
                                                                                                         jobject obj,
                                                                                                         jobject op,
@@ -340,13 +340,13 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return -1;
+        return NULL;
     }
 
-    return (long) objs;
+    return env->NewDirectByteBuffer((void*) objs, sizeof(WObjects));
 }
 
-jlong
+jobject
 Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3B_3_3_3B(
         JNIEnv *env, jobject obj, jobject op, jbyteArray senderSecretkeyA, jobjectArray recipients, jobjectArray keysA) {
 
@@ -391,13 +391,13 @@ Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return -1;
+        return NULL;
     }
 
-    return (long) objs;
+    return env->NewDirectByteBuffer((void*) objs, sizeof(WObjects));
 }
 
-jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3B_3_3_3B(
+jobject Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3_3B_3_3_3B(
         JNIEnv *env, jobject obj, jobject op, jobjectArray recipients, jobjectArray keysA) {
 
     WObjects *objs = nullptr;
@@ -436,25 +436,25 @@ jlong Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsa
         else
             env->ThrowNew(EXCEPTION_CLASS(env), "error");
 
-        return -1;
+        return NULL;
     }
 
-    return (long) objs;
+    return env->NewDirectByteBuffer((void*) objs, sizeof(WObjects));
 }
 
-void Java_net_nharyes_libsaltpack_MessageWriter_destructor(JNIEnv *env, jobject obj, jlong ptr) {
+void Java_net_nharyes_libsaltpack_MessageWriter_destructor(JNIEnv *env, jobject obj, jobject ptr) {
 
-    auto objs = reinterpret_cast<WObjects *>(ptr);
+    WObjects *objs = (WObjects *) env->GetDirectBufferAddress(ptr);
 
     deleteWObjects(env, objs);
 }
 
-void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject obj, jlong ptr, jbyteArray dataA,
+void Java_net_nharyes_libsaltpack_MessageWriter_addBlock(JNIEnv *env, jobject obj, jobject ptr, jbyteArray dataA,
         jint off, jint len, jboolean isFinal) {
 
     try {
 
-        auto *objs = reinterpret_cast<WObjects *>(ptr);
+        WObjects *objs = (WObjects *) env->GetDirectBufferAddress(ptr);
 
         saltpack::BYTE_ARRAY data = copyBytes(env, dataA, off, len);
 

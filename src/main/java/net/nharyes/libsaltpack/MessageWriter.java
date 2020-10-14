@@ -16,6 +16,8 @@
 
 package net.nharyes.libsaltpack;
 
+import java.nio.ByteBuffer;
+
 /**
  * The class used to encrypt or sign a message.
  */
@@ -26,7 +28,7 @@ public class MessageWriter {  // NOPMD
         Loader.loadLibrary();
     }
 
-    private long ptr = -1;  // NOPMD
+    private ByteBuffer ptr;  // NOPMD
 
     /**
      * Creates a new MessageWriter instance to encrypt a message.
@@ -133,10 +135,10 @@ public class MessageWriter {  // NOPMD
      */
     public void destroy() {
 
-        if (ptr != -1) {
+        if (ptr != null) {
 
             destructor(ptr);
-            ptr = -1;
+            ptr = null;  // NOPMD
         }
     }
 
@@ -166,21 +168,21 @@ public class MessageWriter {  // NOPMD
         addBlock(ptr, data, off, len, isFinal);
     }
 
-    private native long constructor(OutputParameters op, byte[] senderSecretkey, byte[][] recipients, boolean visibleRecipients) throws SaltpackException;
+    private native ByteBuffer constructor(OutputParameters op, byte[] senderSecretkey, byte[][] recipients, boolean visibleRecipients) throws SaltpackException;
 
-    private native long constructor(OutputParameters op, byte[] senderSecretkey, byte[][] recipients) throws SaltpackException;
+    private native ByteBuffer constructor(OutputParameters op, byte[] senderSecretkey, byte[][] recipients) throws SaltpackException;
 
-    private native long constructor(OutputParameters op, byte[][] recipients, boolean visibleRecipients) throws SaltpackException;
+    private native ByteBuffer constructor(OutputParameters op, byte[][] recipients, boolean visibleRecipients) throws SaltpackException;
 
-    private native long constructor(OutputParameters op, byte[][] recipients) throws SaltpackException;
+    private native ByteBuffer constructor(OutputParameters op, byte[][] recipients) throws SaltpackException;
 
-    private native long constructor(OutputParameters op, byte[] senderSecretkey, boolean detatchedSignature) throws SaltpackException;
+    private native ByteBuffer constructor(OutputParameters op, byte[] senderSecretkey, boolean detatchedSignature) throws SaltpackException;
 
-    private native long constructor(OutputParameters op, byte[] senderSecretkey, byte[][] recipientsPublickeys, byte[][][] symmetricKeys) throws SaltpackException;
+    private native ByteBuffer constructor(OutputParameters op, byte[] senderSecretkey, byte[][] recipientsPublickeys, byte[][][] symmetricKeys) throws SaltpackException;
 
-    private native long constructor(OutputParameters op, byte[][] recipientsPublickeys, byte[][][] symmetricKeys) throws SaltpackException;
+    private native ByteBuffer constructor(OutputParameters op, byte[][] recipientsPublickeys, byte[][][] symmetricKeys) throws SaltpackException;
 
-    private native void destructor(long ptr);
+    private native void destructor(ByteBuffer ptr);
 
-    private native void addBlock(long ptr, byte[] data, int off, int len, boolean isFinal) throws SaltpackException;
+    private native void addBlock(ByteBuffer ptr, byte[] data, int off, int len, boolean isFinal) throws SaltpackException;
 }

@@ -17,6 +17,7 @@
 package net.nharyes.libsaltpack;
 
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 /**
  * The class used to decrypt or verify a message.
@@ -28,7 +29,7 @@ public class MessageReader {
         Loader.loadLibrary();
     }
 
-    private long ptr = -1;  // NOPMD
+    private ByteBuffer ptr;  // NOPMD
 
     /**
      * Creates a new MessageReader instance to decrypt a message.
@@ -90,10 +91,10 @@ public class MessageReader {
      */
     public void destroy() {
 
-        if (ptr != -1) {
+        if (ptr != null) {
 
             destructor(ptr);
-            ptr = -1;
+            ptr = null;  // NOPMD
         }
     }
 
@@ -152,23 +153,23 @@ public class MessageReader {
         return isIntentionallyAnonymous(ptr);
     }
 
-    private native long constructor(InputParameters in, byte[] recipientSecretkey) throws SaltpackException;
+    private native ByteBuffer constructor(InputParameters in, byte[] recipientSecretkey) throws SaltpackException;
 
-    private native long constructor(InputParameters in) throws SaltpackException;
+    private native ByteBuffer constructor(InputParameters in) throws SaltpackException;
 
-    private native long constructor(InputParameters in, InputStream messageIn) throws SaltpackException;
+    private native ByteBuffer constructor(InputParameters in, InputStream messageIn) throws SaltpackException;
 
-    private native long constructor(InputParameters in, byte[] recipientSecretkey, byte[][] symmetricKey) throws SaltpackException;
+    private native ByteBuffer constructor(InputParameters in, byte[] recipientSecretkey, byte[][] symmetricKey) throws SaltpackException;
 
-    private native void destructor(long ptr);
+    private native void destructor(ByteBuffer ptr);
 
-    private native boolean hasMoreBlocks(long ptr) throws SaltpackException;
+    private native boolean hasMoreBlocks(ByteBuffer ptr) throws SaltpackException;
 
-    private native byte[] getBlock(long ptr) throws SaltpackException;
+    private native byte[] getBlock(ByteBuffer ptr) throws SaltpackException;
 
-    private native byte[][] getRecipients(long ptr) throws SaltpackException;
+    private native byte[][] getRecipients(ByteBuffer ptr) throws SaltpackException;
 
-    private native byte[] getSender(long ptr) throws SaltpackException;
+    private native byte[] getSender(ByteBuffer ptr) throws SaltpackException;
 
-    private native boolean isIntentionallyAnonymous(long ptr) throws SaltpackException;
+    private native boolean isIntentionallyAnonymous(ByteBuffer ptr) throws SaltpackException;
 }
