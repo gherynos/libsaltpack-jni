@@ -38,7 +38,7 @@ jmethodID omGetWordsInPhrase;
 
 WObjects *populateOutputStreams(JNIEnv *env, jobject outputParameters, int mode) {
 
-    if (outputParameters == NULL)
+    if (outputParameters == nullptr)
         throw saltpack::SaltpackException("null output parameters provided");
 
     if (outputparameters == nullptr) {
