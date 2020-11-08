@@ -48,6 +48,9 @@ inline jmethodID loadMethod(JNIEnv *env, jclass cls, const char *method, const c
 
 inline saltpack::BYTE_ARRAY copyBytes(JNIEnv *env, jbyteArray array) {
 
+    if (array == NULL)
+        throw saltpack::SaltpackException("null byte array provided");
+
     size_t size = GET_BYTES_SIZE(array);
     saltpack::BYTE_ARRAY out(size);
 
@@ -59,6 +62,9 @@ inline saltpack::BYTE_ARRAY copyBytes(JNIEnv *env, jbyteArray array) {
 }
 
 inline saltpack::BYTE_ARRAY copyBytes(JNIEnv *env, jbyteArray array, jint off, jint len) {
+
+    if (array == NULL)
+        throw saltpack::SaltpackException("null byte array provided");
 
     auto size = (size_t) len;
     saltpack::BYTE_ARRAY out(size);
@@ -87,6 +93,9 @@ inline jbyteArray copyBytes(JNIEnv *env, saltpack::BYTE_ARRAY array) {
 
 inline std::list<saltpack::BYTE_ARRAY> convertRecipients(JNIEnv *env, jobjectArray recipients) {
 
+    if (recipients == NULL)
+        throw saltpack::SaltpackException("null recipients provided");
+
     jsize len = env->GetArrayLength(recipients);
     std::list<saltpack::BYTE_ARRAY> lRecipients;
     for (jsize i = 0; i < len; i++) {
@@ -102,6 +111,9 @@ inline std::list<saltpack::BYTE_ARRAY> convertRecipients(JNIEnv *env, jobjectArr
 
 inline std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> convertPair(JNIEnv *env, jobjectArray pair) {
 
+    if (pair == NULL)
+        throw saltpack::SaltpackException("null pair provided");
+
     jsize len = env->GetArrayLength(pair);
     if (len != 2)
         return std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>();
@@ -116,6 +128,9 @@ inline std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY> convertPair(JNIEnv 
 }
 
 inline std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> convertKeys(JNIEnv *env, jobjectArray keys) {
+
+    if (keys == NULL)
+        throw saltpack::SaltpackException("null byte array provided");
 
     jsize len = env->GetArrayLength(keys);
     std::list<std::pair<saltpack::BYTE_ARRAY, saltpack::BYTE_ARRAY>> lKeys;

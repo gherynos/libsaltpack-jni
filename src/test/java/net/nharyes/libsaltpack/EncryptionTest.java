@@ -17,6 +17,7 @@
 package net.nharyes.libsaltpack;
 
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

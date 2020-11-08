@@ -6,7 +6,7 @@
 
     <groupId>net.nharyes</groupId>
     <artifactId>libsaltpack-jni</artifactId>
-    <version>0.4.2</version>
+    <version>0.4.3</version>
 
     <name>libsaltpack-jni</name>
     <url>https://github.com/gherynos/libsaltpack-jni</url>
@@ -45,6 +45,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

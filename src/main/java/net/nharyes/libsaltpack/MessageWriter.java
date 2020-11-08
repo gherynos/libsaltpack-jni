@@ -151,6 +151,11 @@ public class MessageWriter {  // NOPMD
      */
     public void addBlock(byte[] data, boolean isFinal) throws SaltpackException {
 
+        if (data == null) {
+
+            throw new SaltpackException("null byte array provided");
+        }
+
         addBlock(ptr, data, 0, data.length, isFinal);
     }
 

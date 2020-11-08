@@ -38,6 +38,9 @@ jmethodID mGetApp;
 
 RObjects *populateInputStreams(JNIEnv *env, jobject inputParameters) {
 
+    if (inputParameters == NULL)
+        throw saltpack::SaltpackException("null input parameters provided");
+
     if (inputparameters == nullptr) {
 
         inputparameters = loadClass(env, "net/nharyes/libsaltpack/InputParameters");
