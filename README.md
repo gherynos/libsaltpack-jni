@@ -1,7 +1,7 @@
 # libsaltpack-jni
 
-[![Build Status](https://travis-ci.org/gherynos/libsaltpack-jni.svg?branch=master)](https://travis-ci.org/gherynos/libsaltpack-jni)
-[![Coverage Status](https://coveralls.io/repos/github/gherynos/libsaltpack-jni/badge.svg?branch=master)](https://coveralls.io/github/gherynos/libsaltpack-jni?branch=master)
+[![Build Status](https://travis-ci.org/gherynos/libsaltpack-jni.svg?branch=main)](https://travis-ci.org/gherynos/libsaltpack-jni)
+[![Coverage Status](https://coveralls.io/repos/github/gherynos/libsaltpack-jni/badge.svg?branch=main)](https://coveralls.io/github/gherynos/libsaltpack-jni?branch=main)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
 A Java Native Interface wrapper for [libsaltpack](https://github.com/Gherynos/libsaltpack).

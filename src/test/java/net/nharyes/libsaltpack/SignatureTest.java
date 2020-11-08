@@ -17,6 +17,7 @@
 package net.nharyes.libsaltpack;
 
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -201,155 +202,158 @@ public class SignatureTest {
     @Test
     public void exceptions() throws Exception {
 
-        MessageReader mr = null;
-        try {
+        assertThrows(SaltpackException.class, new ThrowingRunnable() {
 
-            byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
-            byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
-            Utils.generateSignKeypair(publickey, secretkey);
+            @Override
+            public void run() throws Throwable {
 
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                MessageReader mr = null;
+                try {
 
-            OutputParameters op = new OutputParameters(bout);
-            op.setArmored(false);
+                    byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
+                    byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
+                    Utils.generateSignKeypair(publickey, secretkey);
 
-            MessageWriter mw = new MessageWriter(op, secretkey, false);
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
-            mw.addBlock("A signed message".getBytes("UTF-8"), true);
+                    OutputParameters op = new OutputParameters(bout);
+                    op.setArmored(false);
 
-            mw.destroy();
+                    MessageWriter mw = new MessageWriter(op, secretkey, false);
 
-            byte[] raw = bout.toByteArray();
-            raw[raw.length - 80] %= 12;
+                    mw.addBlock("A signed message".getBytes("UTF-8"), true);
 
-            ByteArrayInputStream bin = new ByteArrayInputStream(raw);
+                    mw.destroy();
 
-            InputParameters ip = new InputParameters(bin);
-            ip.setArmored(false);
+                    byte[] raw = bout.toByteArray();
+                    raw[raw.length - 80] %= 12;
 
-            mr = new MessageReader(ip);
+                    ByteArrayInputStream bin = new ByteArrayInputStream(raw);
 
-            while (mr.hasMoreBlocks()) {
+                    InputParameters ip = new InputParameters(bin);
+                    ip.setArmored(false);
 
-                mr.getBlock();
+                    mr = new MessageReader(ip);
+
+                    while (mr.hasMoreBlocks()) {
+
+                        mr.getBlock();
+                    }
+
+                    mr.destroy();
+
+                } finally {
+
+                    if (mr != null)
+                        mr.destroy();
+                }
             }
+        });
 
-            mr.destroy();
+        assertThrows(SaltpackException.class, new ThrowingRunnable() {
 
-            throw new Exception();
+            @Override
+            public void run() throws Throwable {
 
-        } catch (SaltpackException ex) {
+                MessageReader mr = null;
+                try {
 
-            assertEquals(ex.getMessage(), "Signature was forged or corrupt.");
+                    byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
+                    byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
+                    Utils.generateSignKeypair(publickey, secretkey);
 
-        } finally {
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
-            if (mr != null)
-                mr.destroy();
-        }
+                    OutputParameters op = new OutputParameters(bout);
+                    op.setArmored(true);
 
-        mr = null;
-        try {
+                    byte[] buf1 = new byte[1024];
+                    byte[] buf2 = new byte[1024 * 1024];
+                    Random r = new Random();
+                    r.nextBytes(buf1);
+                    r.nextBytes(buf2);
+                    ByteArrayOutputStream merged = new ByteArrayOutputStream();
+                    merged.write(buf1);
+                    merged.write(buf2);
 
-            byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
-            byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
-            Utils.generateSignKeypair(publickey, secretkey);
+                    MessageWriter mw = new MessageWriter(op, secretkey, true);
 
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                    mw.addBlock(buf1, false);
+                    mw.addBlock(buf2, true);
 
-            OutputParameters op = new OutputParameters(bout);
-            op.setArmored(true);
+                    mw.destroy();
 
-            byte[] buf1 = new byte[1024];
-            byte[] buf2 = new byte[1024 * 1024];
-            Random r = new Random();
-            r.nextBytes(buf1);
-            r.nextBytes(buf2);
-            ByteArrayOutputStream merged = new ByteArrayOutputStream();
-            merged.write(buf1);
-            merged.write(buf2);
+                    byte[] raw = bout.toByteArray();
 
-            MessageWriter mw = new MessageWriter(op, secretkey, true);
+                    ByteArrayInputStream bin = new ByteArrayInputStream(raw);
 
-            mw.addBlock(buf1, false);
-            mw.addBlock(buf2, true);
+                    InputParameters ip = new InputParameters(bin);
+                    ip.setArmored(true);
 
-            mw.destroy();
+                    merged.write('L');
 
-            byte[] raw = bout.toByteArray();
+                    mr = new MessageReader(ip, new ByteArrayInputStream(merged.toByteArray()));
 
-            ByteArrayInputStream bin = new ByteArrayInputStream(raw);
+                    mr.destroy();
 
-            InputParameters ip = new InputParameters(bin);
-            ip.setArmored(true);
+                } finally {
 
-            merged.write('L');
+                    if (mr != null)
+                        mr.destroy();
+                }
+            }
+        });
 
-            mr = new MessageReader(ip, new ByteArrayInputStream(merged.toByteArray()));
+        assertThrows(SaltpackException.class, new ThrowingRunnable() {
 
-            mr.destroy();
+            @Override
+            public void run() throws Throwable {
 
-            throw new Exception();
+                MessageReader mr = null;
+                try {
 
-        } catch (SaltpackException ex) {
+                    byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
+                    byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
+                    Utils.generateSignKeypair(publickey, secretkey);
 
-            assertEquals(ex.getMessage(), "Signature was forged or corrupt.");
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
-        } finally {
+                    OutputParameters op = new OutputParameters(bout);
+                    op.setArmored(true);
 
-            if (mr != null)
-                mr.destroy();
-        }
+                    byte[] buf1 = new byte[1024];
+                    byte[] buf2 = new byte[1024 * 1024];
+                    Random r = new Random();
+                    r.nextBytes(buf1);
+                    r.nextBytes(buf2);
+                    ByteArrayOutputStream merged = new ByteArrayOutputStream();
+                    merged.write(buf1);
+                    merged.write(buf2);
 
-        mr = null;
-        try {
+                    MessageWriter mw = new MessageWriter(op, secretkey, true);
 
-            byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
-            byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
-            Utils.generateSignKeypair(publickey, secretkey);
+                    mw.addBlock(buf1, false);
+                    mw.addBlock(buf2, false);
 
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                    mw.destroy();
 
-            OutputParameters op = new OutputParameters(bout);
-            op.setArmored(true);
+                    byte[] raw = bout.toByteArray();
 
-            byte[] buf1 = new byte[1024];
-            byte[] buf2 = new byte[1024 * 1024];
-            Random r = new Random();
-            r.nextBytes(buf1);
-            r.nextBytes(buf2);
-            ByteArrayOutputStream merged = new ByteArrayOutputStream();
-            merged.write(buf1);
-            merged.write(buf2);
+                    ByteArrayInputStream bin = new ByteArrayInputStream(raw);
 
-            MessageWriter mw = new MessageWriter(op, secretkey, true);
+                    InputParameters ip = new InputParameters(bin);
+                    ip.setArmored(true);
 
-            mw.addBlock(buf1, false);
-            mw.addBlock(buf2, false);
+                    mr = new MessageReader(ip, new ByteArrayInputStream(merged.toByteArray()));
 
-            mw.destroy();
+                    mr.destroy();
 
-            byte[] raw = bout.toByteArray();
+                } finally {
 
-            ByteArrayInputStream bin = new ByteArrayInputStream(raw);
-
-            InputParameters ip = new InputParameters(bin);
-            ip.setArmored(true);
-
-            mr = new MessageReader(ip, new ByteArrayInputStream(merged.toByteArray()));
-
-            mr.destroy();
-
-            throw new Exception();
-
-        } catch (SaltpackException ex) {
-
-            // OK
-
-        } finally {
-
-            if (mr != null)
-                mr.destroy();
-        }
+                    if (mr != null)
+                        mr.destroy();
+                }
+            }
+        });
     }
 }

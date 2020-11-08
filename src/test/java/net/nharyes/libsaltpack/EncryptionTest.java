@@ -542,170 +542,170 @@ public class EncryptionTest {
     @Test
     public void exceptions() throws Exception {
 
-        try {
+        assertThrows(SaltpackException.class, new ThrowingRunnable() {
 
-            byte[] secretkey = new byte[2];
-            byte[] publickey = new byte[2];
+            @Override
+            public void run() throws Throwable {
 
-            Utils.generateKeypair(publickey, secretkey);
-            throw new Exception();
+                byte[] secretkey = new byte[2];
+                byte[] publickey = new byte[2];
 
-        } catch (SaltpackException ex) {
+                Utils.generateKeypair(publickey, secretkey);
+            }
+        });
 
-            // OK
-        }
+        assertThrows(SaltpackException.class, new ThrowingRunnable() {
 
-        MessageReader mr = null;
-        try {
+            @Override
+            public void run() throws Throwable {
 
-            byte[] secretkey = new byte[Constants.CRYPTO_BOX_SECRETKEYBYTES];
-            byte[] publickey = new byte[Constants.CRYPTO_BOX_PUBLICKEYBYTES];
-            Utils.generateKeypair(publickey, secretkey);
+                MessageReader mr = null;
+                try {
 
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                    byte[] secretkey = new byte[Constants.CRYPTO_BOX_SECRETKEYBYTES];
+                    byte[] publickey = new byte[Constants.CRYPTO_BOX_PUBLICKEYBYTES];
+                    Utils.generateKeypair(publickey, secretkey);
 
-            OutputParameters op = new OutputParameters(bout);
-            op.setArmored(false);
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
-            MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey});
+                    OutputParameters op = new OutputParameters(bout);
+                    op.setArmored(false);
 
-            mw.addBlock("Sample".getBytes("UTF-8"), false);
-            mw.addBlock(" message".getBytes("UTF-8"), false);
-            mw.addBlock(".".getBytes("UTF-8"), true);
+                    MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey});
 
-            mw.destroy();
+                    mw.addBlock("Sample".getBytes("UTF-8"), false);
+                    mw.addBlock(" message".getBytes("UTF-8"), false);
+                    mw.addBlock(".".getBytes("UTF-8"), true);
 
-            byte[] raw = bout.toByteArray();
+                    mw.destroy();
 
-            ByteArrayInputStream bin = new ByteArrayInputStream(raw);
+                    byte[] raw = bout.toByteArray();
 
-            InputParameters ip = new InputParameters(bin);
-            ip.setArmored(false);
+                    ByteArrayInputStream bin = new ByteArrayInputStream(raw);
 
-            Utils.generateKeypair(publickey, secretkey);
+                    InputParameters ip = new InputParameters(bin);
+                    ip.setArmored(false);
 
-            mr = new MessageReader(ip, secretkey);
+                    Utils.generateKeypair(publickey, secretkey);
 
-            mr.destroy();
+                    mr = new MessageReader(ip, secretkey);
 
-            throw new Exception();
+                    mr.destroy();
 
-        } catch (SaltpackException ex) {
+                } finally {
 
-            // OK
+                    if (mr != null)
+                        mr.destroy();
+                }
+            }
+        });
 
-        } finally {
+        assertThrows(SaltpackException.class, new ThrowingRunnable() {
 
-            if (mr != null)
-                mr.destroy();
-        }
+            @Override
+            public void run() throws Throwable {
 
-        mr = null;
-        try {
+                MessageReader mr = null;
+                try {
 
-            byte[] secretkey = new byte[Constants.CRYPTO_BOX_SECRETKEYBYTES];
-            byte[] publickey = new byte[Constants.CRYPTO_BOX_PUBLICKEYBYTES];
-            Utils.generateKeypair(publickey, secretkey);
+                    byte[] secretkey = new byte[Constants.CRYPTO_BOX_SECRETKEYBYTES];
+                    byte[] publickey = new byte[Constants.CRYPTO_BOX_PUBLICKEYBYTES];
+                    Utils.generateKeypair(publickey, secretkey);
 
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
-            OutputParameters op = new OutputParameters(bout);
-            op.setArmored(true);
-            op.setApp("AAA");
-            op.setWordsInPhrase(15);
-            op.setLettersInWords(23);
+                    OutputParameters op = new OutputParameters(bout);
+                    op.setArmored(true);
+                    op.setApp("AAA");
+                    op.setWordsInPhrase(15);
+                    op.setLettersInWords(23);
 
-            MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
+                    MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
 
-            mw.addBlock("Sample".getBytes("UTF-8"), false);
-            mw.addBlock(" message".getBytes("UTF-8"), false);
-            mw.addBlock(".".getBytes("UTF-8"), true);
+                    mw.addBlock("Sample".getBytes("UTF-8"), false);
+                    mw.addBlock(" message".getBytes("UTF-8"), false);
+                    mw.addBlock(".".getBytes("UTF-8"), true);
 
-            mw.destroy();
+                    mw.destroy();
 
-            byte[] raw = bout.toByteArray();
+                    byte[] raw = bout.toByteArray();
 
-            ByteArrayInputStream bin = new ByteArrayInputStream(raw);
+                    ByteArrayInputStream bin = new ByteArrayInputStream(raw);
 
-            InputParameters ip = new InputParameters(bin);
-            ip.setArmored(true);
-            ip.setApp("BBB");
+                    InputParameters ip = new InputParameters(bin);
+                    ip.setArmored(true);
+                    ip.setApp("BBB");
 
-            mr = new MessageReader(ip, secretkey);
+                    mr = new MessageReader(ip, secretkey);
 
-            mr.destroy();
+                    mr.destroy();
 
-            throw new Exception();
+                } finally {
 
-        } catch (SaltpackException ex) {
+                    if (mr != null)
+                        mr.destroy();
+                }
+            }
+        });
 
-            // OK
+        assertThrows(SaltpackException.class, new ThrowingRunnable() {
 
-        } finally {
+            @Override
+            public void run() throws Throwable {
 
-            if (mr != null)
-                mr.destroy();
-        }
+                byte[] sk = new byte[3];
 
-        try {
+                OutputParameters op = new OutputParameters(new ByteArrayOutputStream());
 
-            byte[] sk = new byte[3];
+                MessageWriter mw = new MessageWriter(op, sk, new byte[][]{});
+            }
+        });
 
-            OutputParameters op = new OutputParameters(new ByteArrayOutputStream());
+        assertThrows(SaltpackException.class, new ThrowingRunnable() {
 
-            MessageWriter mw = new MessageWriter(op, sk, new byte[][]{});
+            @Override
+            public void run() throws Throwable {
 
-            throw new Exception();
+                MessageReader mr = null;
+                try {
 
-        } catch (SaltpackException ex) {
+                    byte[] secretkey = new byte[Constants.CRYPTO_BOX_SECRETKEYBYTES];
+                    byte[] publickey = new byte[Constants.CRYPTO_BOX_PUBLICKEYBYTES];
+                    Utils.generateKeypair(publickey, secretkey);
 
-            // OK
-        }
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
-        mr = null;
-        try {
+                    OutputParameters op = new OutputParameters(bout);
+                    op.setArmored(true);
+                    op.setApp("AAA");
+                    op.setWordsInPhrase(15);
+                    op.setLettersInWords(23);
 
-            byte[] secretkey = new byte[Constants.CRYPTO_BOX_SECRETKEYBYTES];
-            byte[] publickey = new byte[Constants.CRYPTO_BOX_PUBLICKEYBYTES];
-            Utils.generateKeypair(publickey, secretkey);
+                    MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
 
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                    mw.addBlock("Sample".getBytes("UTF-8"), false);
+                    mw.addBlock(" message".getBytes("UTF-8"), false);
 
-            OutputParameters op = new OutputParameters(bout);
-            op.setArmored(true);
-            op.setApp("AAA");
-            op.setWordsInPhrase(15);
-            op.setLettersInWords(23);
+                    mw.destroy();
 
-            MessageWriter mw = new MessageWriter(op, secretkey, new byte[][]{publickey}, false);
+                    byte[] raw = bout.toByteArray();
 
-            mw.addBlock("Sample".getBytes("UTF-8"), false);
-            mw.addBlock(" message".getBytes("UTF-8"), false);
+                    ByteArrayInputStream bin = new ByteArrayInputStream(raw);
 
-            mw.destroy();
+                    InputParameters ip = new InputParameters(bin);
+                    ip.setArmored(true);
+                    ip.setApp("AAA");
 
-            byte[] raw = bout.toByteArray();
+                    mr = new MessageReader(ip, secretkey);
 
-            ByteArrayInputStream bin = new ByteArrayInputStream(raw);
+                    mr.destroy();
 
-            InputParameters ip = new InputParameters(bin);
-            ip.setArmored(true);
-            ip.setApp("AAA");
+                } finally {
 
-            mr = new MessageReader(ip, secretkey);
-
-            mr.destroy();
-
-            throw new Exception();
-
-        } catch (SaltpackException ex) {
-
-            // OK
-
-        } finally {
-
-            if (mr != null)
-                mr.destroy();
-        }
+                    if (mr != null)
+                        mr.destroy();
+                }
+            }
+        });
     }
 }
