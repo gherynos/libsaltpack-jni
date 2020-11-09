@@ -36,6 +36,23 @@ jmethodID omGetApp;
 jmethodID omGetLettersInWords;
 jmethodID omGetWordsInPhrase;
 
+void deleteWObjects(JNIEnv *env, WObjects *objs) {
+
+    if (objs == nullptr)
+        return;
+
+    delete objs->aout;
+
+    if (objs->outputStream != nullptr)
+        env->DeleteGlobalRef(objs->outputStream);
+
+    delete objs->ow;
+
+    delete objs->mw;
+
+    delete objs;
+}
+
 WObjects *populateOutputStreams(JNIEnv *env, jobject outputParameters, int mode) {
 
     if (outputParameters == nullptr)
@@ -58,35 +75,53 @@ WObjects *populateOutputStreams(JNIEnv *env, jobject outputParameters, int mode)
     objs->ow = new OutputStreamWrapper(env, objs->outputStream);
 
     bool armored = (bool) env->CallBooleanMethod(outputParameters, omIsArmored);
-    if (env->ExceptionCheck())
+    if (env->ExceptionCheck()) {
+
+        deleteWObjects(env, objs);
         throw saltpack::SaltpackException("exception thrown while checking armored flag");
+    }
     if (armored) {
 
         jobject oApp = env->CallObjectMethod(outputParameters, omGetApp);
-        if (env->ExceptionCheck())
+        if (env->ExceptionCheck()) {
+
+            deleteWObjects(env, objs);
             throw saltpack::SaltpackException("exception thrown while checking application name");
+        }
 
         bool intp = (bool) env->CallBooleanMethod(outputParameters, omIntParamsPopulated);
-        if (env->ExceptionCheck())
+        if (env->ExceptionCheck()) {
+
+            deleteWObjects(env, objs);
             throw saltpack::SaltpackException("exception thrown while checking int params flag");
+        }
         int lettersInWords = -1;
         int wordsInPhrase = -1;
         if (intp) {
 
             lettersInWords = (int) env->CallIntMethod(outputParameters, omGetLettersInWords);
-            if (env->ExceptionCheck())
+            if (env->ExceptionCheck()) {
+
+                deleteWObjects(env, objs);
                 throw saltpack::SaltpackException("exception thrown while loading lettersInWords");
+            }
 
             wordsInPhrase = (int) env->CallIntMethod(outputParameters, omGetWordsInPhrase);
-            if (env->ExceptionCheck())
+            if (env->ExceptionCheck()) {
+
+                deleteWObjects(env, objs);
                 throw saltpack::SaltpackException("exception thrown while loading wordsInPhrase");
+            }
         }
 
         if (oApp != nullptr) {
 
             const char *appCStr = env->GetStringUTFChars((jstring) oApp, 0);
-            if (env->ExceptionCheck())
+            if (env->ExceptionCheck()) {
+
+                deleteWObjects(env, objs);
                 throw saltpack::SaltpackException("exception thrown while getting application name");
+            }
             std::string app(appCStr);
             env->ReleaseStringUTFChars((jstring) oApp, appCStr);
 
@@ -105,23 +140,6 @@ WObjects *populateOutputStreams(JNIEnv *env, jobject outputParameters, int mode)
     }
 
     return objs;
-}
-
-void deleteWObjects(JNIEnv *env, WObjects *objs) {
-
-    if (objs == nullptr)
-        return;
-
-    delete objs->aout;
-
-    if (objs->outputStream != nullptr)
-        env->DeleteGlobalRef(objs->outputStream);
-
-    delete objs->ow;
-
-    delete objs->mw;
-
-    delete objs;
 }
 
 jobject Java_net_nharyes_libsaltpack_MessageWriter_constructor__Lnet_nharyes_libsaltpack_OutputParameters_2_3B_3_3BZ(

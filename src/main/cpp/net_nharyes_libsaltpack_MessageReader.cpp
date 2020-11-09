@@ -36,6 +36,26 @@ jmethodID mGetInputStream;
 jmethodID mIsArmored;
 jmethodID mGetApp;
 
+void deleteRObjects(JNIEnv *env, RObjects *objs) {
+
+    if (objs == nullptr)
+        return;
+
+    delete objs->ain;
+
+    if (objs->inputStream != nullptr)
+        env->DeleteGlobalRef(objs->inputStream);
+
+    if (objs->messageIn != nullptr)
+        env->DeleteGlobalRef(objs->messageIn);
+
+    delete objs->iw;
+
+    delete objs->mw;
+
+    delete objs;
+}
+
 RObjects *populateInputStreams(JNIEnv *env, jobject inputParameters) {
 
     if (inputParameters == nullptr)
@@ -55,18 +75,27 @@ RObjects *populateInputStreams(JNIEnv *env, jobject inputParameters) {
     objs->iw = new InputStreamWrapper(env, objs->inputStream);
 
     bool armored = (bool) env->CallBooleanMethod(inputParameters, mIsArmored);
-    if (env->ExceptionCheck())
+    if (env->ExceptionCheck()) {
+
+        deleteRObjects(env, objs);
         throw saltpack::SaltpackException("exception thrown while checking armored flag");
+    }
     if (armored) {
 
         jobject oApp = env->CallObjectMethod(inputParameters, mGetApp);
-        if (env->ExceptionCheck())
+        if (env->ExceptionCheck()) {
+
+            deleteRObjects(env, objs);
             throw saltpack::SaltpackException("exception thrown while checking application name");
+        }
         if (oApp != nullptr) {
 
             const char *appCStr = env->GetStringUTFChars((jstring) oApp, 0);
-            if (env->ExceptionCheck())
+            if (env->ExceptionCheck()) {
+
+                deleteRObjects(env, objs);
                 throw saltpack::SaltpackException("exception thrown while getting application name");
+            }
             std::string app(appCStr);
             env->ReleaseStringUTFChars((jstring) oApp, appCStr);
 
@@ -77,26 +106,6 @@ RObjects *populateInputStreams(JNIEnv *env, jobject inputParameters) {
     }
 
     return objs;
-}
-
-void deleteRObjects(JNIEnv *env, RObjects *objs) {
-
-    if (objs == nullptr)
-        return;
-
-    delete objs->ain;
-
-    if (objs->inputStream != nullptr)
-        env->DeleteGlobalRef(objs->inputStream);
-
-    if (objs->messageIn != nullptr)
-        env->DeleteGlobalRef(objs->messageIn);
-
-    delete objs->iw;
-
-    delete objs->mw;
-
-    delete objs;
 }
 
 jobject Java_net_nharyes_libsaltpack_MessageReader_constructor__Lnet_nharyes_libsaltpack_InputParameters_2_3B(JNIEnv *env,
