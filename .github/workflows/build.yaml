@@ -1,0 +1,95 @@
+---
+name: build
+
+on: [push]
+
+jobs:
+  linux:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Dependencies
+        run: |
+          sudo apt-get install -y build-essential clang-9 wget cmake openjdk-8-jdk maven xz-utils m4
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang-9 10
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++-9 10
+
+      - name: MsgPack
+        run: |
+          wget https://github.com/msgpack/msgpack-c/releases/download/cpp-2.0.0/msgpack-2.0.0.tar.gz
+          tar -xvzf msgpack-2.0.0.tar.gz
+          pushd msgpack-2.0.0
+          cmake .
+          make
+          sudo make install
+          popd
+
+      - name: LibSodium
+        run: |
+          wget https://github.com/jedisct1/libsodium/releases/download/1.0.9/libsodium-1.0.9.tar.gz
+          tar -xvzf libsodium-1.0.9.tar.gz
+          pushd libsodium-1.0.9
+          ./configure --with-pic
+          make
+          sudo make install
+          popd
+
+      - name: LibSaltpack
+        run: |
+          wget https://github.com/gherynos/libsaltpack/archive/v0.3.1.tar.gz
+          tar -xvzf v0.3.1.tar.gz
+          pushd libsaltpack-0.3.1
+          git clone https://github.com/983/Num.git ext/Num
+          cmake .
+          make
+          sudo make install
+          popd
+
+      - name: Build
+        run: |
+          mvn compile
+          cmake .
+          make
+          mvn exec:java -Dexec.mainClass="net.nharyes.libsaltpack.Loader"
+          rm libsaltpack-jni.so
+          mvn test
+
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+
+      - name: Coverage
+        run: mvn jacoco:report coveralls:report
+
+  macos:
+    runs-on: macos-10.15
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Dependencies
+        run: brew install libsodium msgpack msgpack-cxx openjdk@11
+
+      - name: LibSaltpack
+        run: |
+          wget https://github.com/gherynos/libsaltpack/archive/v0.3.1.tar.gz
+          tar -xvzf v0.3.1.tar.gz
+          pushd libsaltpack-0.3.1
+          git clone https://github.com/983/Num.git ext/Num
+          cmake .
+          make
+          sudo make install
+          popd
+
+      - name: Build
+        run: |
+          mvn compile
+          cmake .
+          make
+          mvn exec:java -Dexec.mainClass="net.nharyes.libsaltpack.Loader"
+          rm libsaltpack-jni.dylib
+          mvn test
+
+        env:
+          JAVA_HOME: /usr/local/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home
