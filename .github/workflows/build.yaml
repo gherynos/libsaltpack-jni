@@ -60,7 +60,7 @@ jobs:
           JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
 
       - name: Coverage
-        run: mvn jacoco:report coveralls:report
+        run: mvn jacoco:report coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
 
   macos:
     runs-on: macos-10.15
