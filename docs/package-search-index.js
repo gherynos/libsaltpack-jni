@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"net.nharyes.libsaltpack"}]
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"net.nharyes.libsaltpack"}];updateSearchResults();
