@@ -4,33 +4,57 @@ name: build
 on: [push]
 
 jobs:
-  linux:
-    runs-on: ubuntu-20.04
+  unix:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, macos-13, macos-14]
+        include:
+          - os: ubuntu-22.04
+            java_home: /usr/lib/jvm/java-17-openjdk-amd64
+            library: libsaltpack-jni.so
+          - os: macos-13
+            java_home: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+            library: libsaltpack-jni.dylib
+          - os: macos-14
+            java_home: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+            library: libsaltpack-jni.dylib
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Dependencies
+      - if: runner.os == 'Linux'
         run: |
-          sudo apt-get install -y build-essential clang-9 wget cmake openjdk-8-jdk maven xz-utils m4
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/clang-9 10
-          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/clang++-9 10
+          sudo apt-get install -y build-essential wget cmake openjdk-17-jdk maven xz-utils m4
+
+      - if: runner.os == 'macOS'
+        env:
+          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
+          HOMEBREW_NO_AUTO_UPDATE: 1
+        run: |
+          brew tap homebrew/cask-versions
+          brew install --cask temurin17
+
+      - name: boost
+        run: |
+          wget https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.gz
+          tar -xzf boost_1_84_0.tar.gz
+          mv boost_1_84_0 boost_libs
 
       - name: MsgPack
         run: |
-          wget https://github.com/msgpack/msgpack-c/releases/download/cpp-2.0.0/msgpack-2.0.0.tar.gz
-          tar -xvzf msgpack-2.0.0.tar.gz
-          pushd msgpack-2.0.0
-          cmake .
-          make
-          sudo make install
+          wget https://github.com/msgpack/msgpack-c/releases/download/cpp-6.1.0/msgpack-cxx-6.1.0.tar.gz
+          tar -xvzf msgpack-cxx-6.1.0.tar.gz
+          pushd msgpack-cxx-6.1.0
+          cmake -DMSGPACK_CXX14=ON -DBoost_INCLUDE_DIR=../boost_libs .
+          sudo cmake --build . --target install
           popd
 
       - name: LibSodium
         run: |
-          wget https://github.com/jedisct1/libsodium/releases/download/1.0.9/libsodium-1.0.9.tar.gz
-          tar -xvzf libsodium-1.0.9.tar.gz
-          pushd libsodium-1.0.9
+          wget https://github.com/jedisct1/libsodium/releases/download/1.0.19-RELEASE/libsodium-1.0.19.tar.gz
+          tar -xvzf libsodium-1.0.19.tar.gz
+          pushd libsodium-stable
           ./configure --with-pic
           make
           sudo make install
@@ -38,11 +62,11 @@ jobs:
 
       - name: LibSaltpack
         run: |
-          wget https://github.com/gherynos/libsaltpack/archive/v0.3.1.tar.gz
-          tar -xvzf v0.3.1.tar.gz
-          pushd libsaltpack-0.3.1
+          wget https://github.com/gherynos/libsaltpack/archive/v0.3.2.tar.gz
+          tar -xvzf v0.3.2.tar.gz
+          pushd libsaltpack-0.3.2
           git clone https://github.com/983/Num.git ext/Num
-          cmake .
+          cmake -DCMAKE_CXX_FLAGS="-I ../boost_libs" .
           make
           sudo make install
           popd
@@ -50,46 +74,19 @@ jobs:
       - name: Build
         run: |
           mvn compile
-          cmake .
+          cmake -DCMAKE_CXX_FLAGS="-I boost_libs" .
           make
           mvn exec:java -Dexec.mainClass="net.nharyes.libsaltpack.Loader"
-          rm libsaltpack-jni.so
+          rm ${{ matrix.library }}
           mvn test
 
         env:
-          JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+          JAVA_HOME: ${{ matrix.java_home }}
 
-      - name: Coverage
+      - if: runner.os == 'Linux'
         run: mvn jacoco:report coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
 
-  macos:
-    runs-on: macos-10.15
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Dependencies
-        run: brew install libsodium msgpack msgpack-cxx openjdk@11
-
-      - name: LibSaltpack
-        run: |
-          wget https://github.com/gherynos/libsaltpack/archive/v0.3.1.tar.gz
-          tar -xvzf v0.3.1.tar.gz
-          pushd libsaltpack-0.3.1
-          git clone https://github.com/983/Num.git ext/Num
-          cmake .
-          make
-          sudo make install
-          popd
-
-      - name: Build
-        run: |
-          mvn compile
-          cmake .
-          make
-          mvn exec:java -Dexec.mainClass="net.nharyes.libsaltpack.Loader"
-          rm libsaltpack-jni.dylib
-          mvn test
-
-        env:
-          JAVA_HOME: /usr/local/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}
+          path: src/main/resources/lib/

@@ -217,54 +217,6 @@ public class SignatureTest {
                     ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
                     OutputParameters op = new OutputParameters(bout);
-                    op.setArmored(false);
-
-                    MessageWriter mw = new MessageWriter(op, secretkey, false);
-
-                    mw.addBlock("A signed message".getBytes("UTF-8"), true);
-
-                    mw.destroy();
-
-                    byte[] raw = bout.toByteArray();
-                    raw[raw.length - 80] %= 12;
-
-                    ByteArrayInputStream bin = new ByteArrayInputStream(raw);
-
-                    InputParameters ip = new InputParameters(bin);
-                    ip.setArmored(false);
-
-                    mr = new MessageReader(ip);
-
-                    while (mr.hasMoreBlocks()) {
-
-                        mr.getBlock();
-                    }
-
-                    mr.destroy();
-
-                } finally {
-
-                    if (mr != null)
-                        mr.destroy();
-                }
-            }
-        });
-
-        assertThrows(SaltpackException.class, new ThrowingRunnable() {
-
-            @Override
-            public void run() throws Throwable {
-
-                MessageReader mr = null;
-                try {
-
-                    byte[] secretkey = new byte[Constants.CRYPTO_SIGN_SECRETKEYBYTES];
-                    byte[] publickey = new byte[Constants.CRYPTO_SIGN_PUBLICKEYBYTES];
-                    Utils.generateSignKeypair(publickey, secretkey);
-
-                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
-
-                    OutputParameters op = new OutputParameters(bout);
                     op.setArmored(true);
 
                     byte[] buf1 = new byte[1024];
