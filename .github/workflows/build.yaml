@@ -1,7 +1,10 @@
 ---
 name: build
 
-on: [push]
+on:
+  push:
+  release:
+    types: [created]
 
 jobs:
   unix:
@@ -21,13 +24,15 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - if: runner.os == 'Linux'
+        name: Linux dependencies
         run: |
           sudo apt-get install -y build-essential wget cmake openjdk-17-jdk maven xz-utils m4
 
       - if: runner.os == 'macOS'
+        name: macOS dependencies
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
@@ -83,10 +88,54 @@ jobs:
         env:
           JAVA_HOME: ${{ matrix.java_home }}
 
-      - if: runner.os == 'Linux'
+      - if: runner.os == 'Linux' && github.event_name == 'push'
+        name: Coveralls report
         run: mvn jacoco:report coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}
+          name: ${{ matrix.os }}.zip
           path: src/main/resources/lib/
+
+  assemble:
+    needs: unix
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Libraries path
+        run: |
+          mkdir -p src/main/resources/lib
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-22.04.zip
+          path: src/main/resources/lib
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-13.zip
+          path: src/main/resources/lib
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos-14.zip
+          path: src/main/resources/lib
+
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Package
+        run: |
+          mvn package
+
+      - if: github.event_name == 'release'
+        name: Publish
+        run: |
+          mvn --batch-mode deploy
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
