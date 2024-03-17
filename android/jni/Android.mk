@@ -5,7 +5,7 @@ ifeq ($(ARCH_FOLDER),arm)
     ARCH_FOLDER = armv7-a
 endif
 ifeq ($(ARCH_FOLDER),arm64)
-    ARCH_FOLDER = armv8-a
+    ARCH_FOLDER = armv8-a+crypto
 endif
 ifeq ($(ARCH_FOLDER),x86)
     ARCH_FOLDER = i686
@@ -39,6 +39,7 @@ LOCAL_MODULE := saltpack-jni
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src/main/cpp/include
 LOCAL_C_INCLUDES += ${LIBSODIUM_PATH}/libsodium-android-$(ARCH_FOLDER)/include
 LOCAL_C_INCLUDES += ${MSGPACK_PATH}/include
+LOCAL_C_INCLUDES += ${BOOST_PATH}
 LOCAL_C_INCLUDES += ${LIBSALTPACK_PATH}/include
 
 LOCAL_SRC_FILES += ../../src/main/cpp/InputStreamWrapper.cpp
