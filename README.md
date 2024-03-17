@@ -31,14 +31,14 @@ mvn package
 Here's how to build libsaltpack-jni and all its dependencies for Android using Docker:
 
 ```bash
-docker run --rm -v `pwd`:/opt/libsaltpack-jni -t ubuntu:xenial /bin/bash /opt/libsaltpack-jni/android/compile.sh
+docker run --platform=linux/amd64 --rm -v `pwd`:/opt/libsaltpack-jni -t ubuntu:jammy /bin/bash /opt/libsaltpack-jni/android/compile.sh
 ```
 
 This will produce the `libsaltpack-jni-<version>.jar` file under the `target` directory, containing the Java classes and the binary libraries.
 
 ## Documentation
 
-The Javadoc can be found here: [https://gherynos.github.io/libsaltpack-jni](https://gherynos.github.io/libsaltpack-jni).
+The Javadoc can be found here: [https://libsaltpack-jni.nharyes.net](https://libsaltpack-jni.nharyes.net).
 
 ## Examples
 
