@@ -7,7 +7,7 @@ export NDK_PLATFORM=android-$NDK_PLATFORM_NUM
 LIBSODIUM_VER=1.0.19
 MSGPACK_VER=6.1.0
 BOOST_VER=1.84.0
-LIBSALTPACK_VER=v0.3.2
+LIBSALTPACK_VER=v0.3.3
 
 PT=/opt/libsaltpack-jni/android/tmp
 cd $PT || exit

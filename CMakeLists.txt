@@ -39,5 +39,7 @@ include_directories(${LIBSODIUM_INCLUDE_DIRS})
 target_link_libraries(saltpack-jni ${LIBSODIUM_LIBRARIES})
 
 # MessagePack
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
 find_package(Msgpack REQUIRED)
 include_directories(${MSGPACK_INCLUDE_DIRS})

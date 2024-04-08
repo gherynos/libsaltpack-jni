@@ -67,11 +67,11 @@ jobs:
 
       - name: LibSaltpack
         run: |
-          wget https://github.com/gherynos/libsaltpack/archive/v0.3.2.tar.gz
-          tar -xvzf v0.3.2.tar.gz
-          pushd libsaltpack-0.3.2
+          wget https://github.com/gherynos/libsaltpack/archive/v0.3.3.tar.gz
+          tar -xvzf v0.3.3.tar.gz
+          pushd libsaltpack-0.3.3
           git clone https://github.com/983/Num.git ext/Num
-          cmake -DCMAKE_CXX_FLAGS="-I ../boost_libs" .
+          cmake -DBoost_INCLUDE_DIR=../boost_libs .
           make
           sudo make install
           popd
@@ -79,7 +79,7 @@ jobs:
       - name: Build
         run: |
           mvn compile
-          cmake -DCMAKE_CXX_FLAGS="-I boost_libs" .
+          cmake -DBoost_INCLUDE_DIR=./boost_libs .
           make
           mvn exec:java -Dexec.mainClass="com.gherynos.libsaltpack.Loader"
           rm ${{ matrix.library }}
