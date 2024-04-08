@@ -18,8 +18,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 include_directories("src/main/cpp/include")
 
 # Sources
-set(SOURCE_FILES src/main/cpp/InputStreamWrapper.cpp src/main/cpp/OutputStreamWrapper.cpp src/main/cpp/net_nharyes_libsaltpack_MessageReader.cpp src/main/cpp/net_nharyes_libsaltpack_MessageWriter.cpp src/main/cpp/net_nharyes_libsaltpack_Utils.cpp)
-set(HEADER_FILES src/main/cpp/include/common.h src/main/cpp/include/InputStreamWrapper.h src/main/cpp/include/OutputStreamWrapper.h src/main/cpp/include/net_nharyes_libsaltpack_MessageReader.h src/main/cpp/include/net_nharyes_libsaltpack_MessageWriter.h src/main/cpp/include/net_nharyes_libsaltpack_Utils.h)
+set(SOURCE_FILES src/main/cpp/InputStreamWrapper.cpp src/main/cpp/OutputStreamWrapper.cpp src/main/cpp/com_gherynos_libsaltpack_MessageReader.cpp src/main/cpp/com_gherynos_libsaltpack_MessageWriter.cpp src/main/cpp/com_gherynos_libsaltpack_Utils.cpp)
+set(HEADER_FILES src/main/cpp/include/common.h src/main/cpp/include/InputStreamWrapper.h src/main/cpp/include/OutputStreamWrapper.h src/main/cpp/include/com_gherynos_libsaltpack_MessageReader.h src/main/cpp/include/com_gherynos_libsaltpack_MessageWriter.h src/main/cpp/include/com_gherynos_libsaltpack_Utils.h)
 
 add_library(saltpack-jni SHARED ${SOURCE_FILES} ${HEADER_FILES})
 

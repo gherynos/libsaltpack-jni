@@ -22,7 +22,7 @@ Here's how to build the JAR package and the dynamic library on Linux or OSX:
 mvn compile
 cmake .
 make
-mvn exec:java -Dexec.mainClass="net.nharyes.libsaltpack.Loader"
+mvn exec:java -Dexec.mainClass="com.gherynos.libsaltpack.Loader"
 mvn package
 ```
 
@@ -38,14 +38,14 @@ This will produce the `libsaltpack-jni-<version>.jar` file under the `target` di
 
 ## Documentation
 
-The Javadoc can be found here: [https://libsaltpack-jni.nharyes.net](https://libsaltpack-jni.nharyes.net).
+The Javadoc can be found here: [https://libsaltpack-jni.gherynos.com](https://libsaltpack-jni.gherynos.com).
 
 ## Examples
 
 ### Encrypt/decrypt message
 
 ```java
-import net.nharyes.libsaltpack.*;
+import com.gherynos.libsaltpack.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -105,7 +105,7 @@ class Test {
 #### Attached signature
 
 ```java
-import net.nharyes.libsaltpack.*;
+import com.gherynos.libsaltpack.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -159,7 +159,7 @@ class Test {
 #### Detached signature
 
 ```java
-import net.nharyes.libsaltpack.*;
+import com.gherynos.libsaltpack.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -210,7 +210,7 @@ class Test {
 #### Curve25519 key
 
 ```java
-import net.nharyes.libsaltpack.*;
+import com.gherynos.libsaltpack.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -276,7 +276,7 @@ class Test {
 #### Symmetric key
 
 ```java
-import net.nharyes.libsaltpack.*;
+import com.gherynos.libsaltpack.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -25,7 +25,7 @@
 #define RELEASE_BYTES(array, data) (env->ReleaseByteArrayElements(array, (jbyte *) data, 0))
 #define GET_BYTES_SIZE(array) ((size_t) env->GetArrayLength(array))
 
-#define EXCEPTION_CLASS(env) (loadClass(env, "net/nharyes/libsaltpack/SaltpackException"))
+#define EXCEPTION_CLASS(env) (loadClass(env, "com/gherynos/libsaltpack/SaltpackException"))
 #define BYTE_ARRAY_CLASS(env) (loadClass(env, "[B"))
 
 inline jclass loadClass(JNIEnv *env, const char *cls) {

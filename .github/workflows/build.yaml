@@ -81,7 +81,7 @@ jobs:
           mvn compile
           cmake -DCMAKE_CXX_FLAGS="-I boost_libs" .
           make
-          mvn exec:java -Dexec.mainClass="net.nharyes.libsaltpack.Loader"
+          mvn exec:java -Dexec.mainClass="com.gherynos.libsaltpack.Loader"
           rm ${{ matrix.library }}
           mvn test
 

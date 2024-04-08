@@ -5,7 +5,7 @@ default_language_version:
 exclude: (CMakeFiles|cmake_modules|docs|target)\/
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-json
       - id: check-merge-conflict
@@ -39,8 +39,8 @@ repos:
     hooks:
       - id: yamllint
   - repo: https://github.com/gherynos/pre-commit-java
-    rev: v0.3.0
+    rev: v0.4.0
     hooks:
       - id: pmd
         exclude: /test/
-        args: ["-R", "ruleset.xml", "-cache", "pmd.cache"]
+        args: ["-R", "ruleset.xml"]

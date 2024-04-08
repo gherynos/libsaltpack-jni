@@ -43,9 +43,9 @@ LOCAL_C_INCLUDES += ${BOOST_PATH}
 LOCAL_C_INCLUDES += ${LIBSALTPACK_PATH}/include
 
 LOCAL_SRC_FILES += ../../src/main/cpp/InputStreamWrapper.cpp
-LOCAL_SRC_FILES += ../../src/main/cpp/net_nharyes_libsaltpack_MessageReader.cpp
-LOCAL_SRC_FILES += ../../src/main/cpp/net_nharyes_libsaltpack_MessageWriter.cpp
-LOCAL_SRC_FILES += ../../src/main/cpp/net_nharyes_libsaltpack_Utils.cpp
+LOCAL_SRC_FILES += ../../src/main/cpp/com_gherynos_libsaltpack_MessageReader.cpp
+LOCAL_SRC_FILES += ../../src/main/cpp/com_gherynos_libsaltpack_MessageWriter.cpp
+LOCAL_SRC_FILES += ../../src/main/cpp/com_gherynos_libsaltpack_Utils.cpp
 LOCAL_SRC_FILES += ../../src/main/cpp/OutputStreamWrapper.cpp
 
 LOCAL_STATIC_LIBRARIES += saltpack

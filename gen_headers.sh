@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cd src/main/cpp/include
-javah -cp ../../java net.nharyes.libsaltpack.MessageReader
-javah -cp ../../java net.nharyes.libsaltpack.MessageWriter
-javah -cp ../../java net.nharyes.libsaltpack.Utils
+javah -cp ../../java com.gherynos.libsaltpack.MessageReader
+javah -cp ../../java com.gherynos.libsaltpack.MessageWriter
+javah -cp ../../java com.gherynos.libsaltpack.Utils
 cd ../../../
