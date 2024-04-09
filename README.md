@@ -8,7 +8,7 @@ A Java Native Interface wrapper for [libsaltpack](https://github.com/Gherynos/li
 
 ## Dependencies
 
-* [libsaltpack](https://github.com/Gherynos/libsaltpack)
+* [libsaltpack](https://github.com/gherynos/libsaltpack)
 * [libsodium](https://download.libsodium.org/doc/) >= 1.0.9
 * [msgpack](https://github.com/msgpack/msgpack-c) >= 2.0.0
 
