@@ -75,6 +75,7 @@ public final class Loader {
         } else if (os.contains("win")) {
 
             ext = "dll";
+            os = "windows";
 
         } else {
 

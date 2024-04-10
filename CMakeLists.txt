@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.13)
 project(saltpack-jni)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -Wall")
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 if(MSVC)
-    #vc 2012 fix for vararg templates
-    set(MSVC_COMPILER_DEFS "-D_VARIADIC_MAX=10")
+    set(MSVC_COMPILER_DEFS "-D_VARIADIC_MAX=10")  #vc 2012 fix for vararg templates
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
 
 IF(WIN32)

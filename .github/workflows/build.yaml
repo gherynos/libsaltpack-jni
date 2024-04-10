@@ -7,38 +7,92 @@ on:
     types: [created]
 
 jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Install dependencies
+        run: |
+          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+          choco install cmake
+          refreshenv
+          Write-Output "$env:PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: boost
+        run: |
+          Invoke-WebRequest https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.gz -OutFile boost.tar.gz
+          tar -xzf .\boost.tar.gz
+          Rename-Item -path boost_1_84_0 -NewName boost_libs
+
+      - name: MsgPack
+        run: |
+          Invoke-WebRequest https://github.com/msgpack/msgpack-c/releases/download/cpp-6.1.0/msgpack-cxx-6.1.0.tar.gz -OutFile msgpack.tar.gz
+          tar -xzf .\msgpack.tar.gz
+          cd msgpack-cxx-6.1.0
+          cmake -DMSGPACK_CXX14=ON -D Boost_INCLUDE_DIR=..\boost_libs .
+          msbuild ALL_BUILD.vcxproj -t:rebuild -property:Configuration=Release
+
+      - name: LibSodium
+        run: |
+          Invoke-WebRequest https://github.com/jedisct1/libsodium/releases/download/1.0.19-RELEASE/libsodium-1.0.19-msvc.zip -OutFile libsodium.zip
+          Expand-Archive libsodium.zip .
+
+      - name: LibSaltpack
+        run: |
+          Invoke-WebRequest https://github.com/gherynos/libsaltpack/archive/v1.0.0.tar.gz -OutFile libsaltpack.tar.gz
+          tar -xvzf .\libsaltpack.tar.gz
+          cd libsaltpack-1.0.0
+          git clone https://github.com/983/Num.git ext/Num
+          cmake -D Boost_INCLUDE_DIR=..\boost_libs -D MSGPACK_INCLUDE_DIR=..\msgpack-cxx-6.1.0\include -D LIBSODIUM_INCLUDE_DIRS=..\libsodium\include -D LIBSODIUM_LIBRARIES=..\libsodium\x64\Release\v143\static\libsodium.lib .
+          msbuild saltpack.vcxproj -t:rebuild -property:Configuration=Release
+
+      - name: Build
+        run: |
+          mvn compile
+          cmake -D Boost_INCLUDE_DIR=.\boost_libs -D MSGPACK_INCLUDE_DIR=.\msgpack-cxx-6.1.0\include -D LIBSODIUM_INCLUDE_DIRS=.\libsodium\include -D LIBSODIUM_LIBRARIES=.\libsodium\x64\Release\v143\static\libsodium.lib -D LIBSALTPACK_INCLUDE_DIRS=.\libsaltpack-1.0.0\include -D LIBSALTPACK_LIBRARIES=.\libsaltpack-1.0.0\Release\saltpack.lib .
+          msbuild saltpack-jni.vcxproj -t:rebuild -property:Configuration=Release
+          mvn exec:java -D"exec.mainClass"="com.gherynos.libsaltpack.Loader"
+          mvn test
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-2022.zip
+          path: src/main/resources/lib/
+
   unix:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-13, macos-14]
         include:
           - os: ubuntu-22.04
-            java_home: /usr/lib/jvm/java-17-openjdk-amd64
             library: libsaltpack-jni.so
           - os: macos-13
-            java_home: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
             library: libsaltpack-jni.dylib
           - os: macos-14
-            java_home: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
             library: libsaltpack-jni.dylib
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - if: runner.os == 'Linux'
         name: Linux dependencies
         run: |
-          sudo apt-get install -y build-essential wget cmake openjdk-17-jdk maven xz-utils m4
-
-      - if: runner.os == 'macOS'
-        name: macOS dependencies
-        env:
-          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
-          HOMEBREW_NO_AUTO_UPDATE: 1
-        run: |
-          brew tap homebrew/cask-versions
-          brew install --cask temurin17
+          sudo apt-get install -y build-essential wget cmake maven xz-utils m4
 
       - name: boost
         run: |
@@ -50,31 +104,28 @@ jobs:
         run: |
           wget https://github.com/msgpack/msgpack-c/releases/download/cpp-6.1.0/msgpack-cxx-6.1.0.tar.gz
           tar -xvzf msgpack-cxx-6.1.0.tar.gz
-          pushd msgpack-cxx-6.1.0
+          cd msgpack-cxx-6.1.0
           cmake -DMSGPACK_CXX14=ON -DBoost_INCLUDE_DIR=../boost_libs .
           sudo cmake --build . --target install
-          popd
 
       - name: LibSodium
         run: |
           wget https://github.com/jedisct1/libsodium/releases/download/1.0.19-RELEASE/libsodium-1.0.19.tar.gz
           tar -xvzf libsodium-1.0.19.tar.gz
-          pushd libsodium-stable
+          cd libsodium-stable
           ./configure --with-pic
           make
           sudo make install
-          popd
 
       - name: LibSaltpack
         run: |
-          wget https://github.com/gherynos/libsaltpack/archive/v0.3.3.tar.gz
-          tar -xvzf v0.3.3.tar.gz
-          pushd libsaltpack-0.3.3
+          wget https://github.com/gherynos/libsaltpack/archive/v1.0.0.tar.gz
+          tar -xvzf v1.0.0.tar.gz
+          cd libsaltpack-1.0.0
           git clone https://github.com/983/Num.git ext/Num
           cmake -DBoost_INCLUDE_DIR=../boost_libs .
           make
           sudo make install
-          popd
 
       - name: Build
         run: |
@@ -84,9 +135,6 @@ jobs:
           mvn exec:java -Dexec.mainClass="com.gherynos.libsaltpack.Loader"
           rm ${{ matrix.library }}
           mvn test
-
-        env:
-          JAVA_HOME: ${{ matrix.java_home }}
 
       - if: runner.os == 'Linux' && github.event_name == 'push'
         name: Coveralls report
@@ -98,7 +146,9 @@ jobs:
           path: src/main/resources/lib/
 
   assemble:
-    needs: unix
+    needs:
+      - unix
+      - windows
     runs-on: ubuntu-22.04
 
     steps:
@@ -123,7 +173,12 @@ jobs:
           name: macos-14.zip
           path: src/main/resources/lib
 
-      - uses: actions/setup-java@v3
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-2022.zip
+          path: src/main/resources/lib
+
+      - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -131,6 +186,12 @@ jobs:
       - name: Package
         run: |
           mvn package
+
+      - if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: assemble.zip
+          path: target/*.jar
 
       - if: github.event_name == 'release'
         name: Publish
